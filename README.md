@@ -32,7 +32,6 @@
     ./gradlew desktop:run
     ```
 
-> **Nota:** Se requiere conexión a internet solo para el modo online.
 
 ## 📌 Estado Actual del Proyecto
 
