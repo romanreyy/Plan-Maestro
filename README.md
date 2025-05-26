@@ -1,4 +1,4 @@
-# 🗺️ Proyecto: Conquista Global - Estrategia por Turnos
+# 🗺️ Proyecto: Plan Maestro
 
 ## 👥 Integrantes del Grupo
 - Román Rey
