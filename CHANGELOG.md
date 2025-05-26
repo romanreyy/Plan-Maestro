@@ -2,12 +2,9 @@
 
 Todas las modificaciones importantes del proyecto serán documentadas en este archivo.
 
-Este proyecto sigue el formato [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
-y utiliza [Semantic Versioning](https://semver.org/lang/es/).
-
 ---
 
-## [0.1.0] - 2025-05-26
+## [0.1.0] - 2025-26-05
 
 ### Agregado
 - Estructura inicial del proyecto creada con LibGDX.
@@ -22,7 +19,4 @@ y utiliza [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Próximamente
-- Implementación de personajes con habilidades y lore individual.
-- Vista inicial del mapa interactivo.
-- Sistema de refuerzo y despliegue de tropas.
-- Inicio del modo multijugador local.
+
