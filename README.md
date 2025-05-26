@@ -5,7 +5,7 @@
 
 ## 🎮 Descripción Corta del Juego
 
-*Conquista Global* es un videojuego de estrategia por turnos para PC, inspirado en el clásico juego de mesa argentino T.E.G. Los jugadores competirán por conquistar territorios en un mapa mundial, utilizando tácticas militares, gestión de tropas y habilidades especiales de personajes únicos. Cada jugador cuenta con un objetivo secreto que, al cumplirse, le otorgará la victoria. El juego contará con modos local y en línea, conservando la esencia del T.E.G. original y sumando innovaciones como poderes, personajes con lore y una tienda estratégica.
+*Plan Maestro* es un videojuego de estrategia por turnos para PC, inspirado en el clásico juego de mesa argentino T.E.G. Los jugadores competirán por conquistar territorios en un mapa mundial, utilizando tácticas militares, gestión de tropas y habilidades especiales de personajes únicos. Cada jugador cuenta con un objetivo secreto que, al cumplirse, le otorgará la victoria. El juego contará con modos local y en línea, conservando la esencia del T.E.G. original y sumando innovaciones como poderes, personajes con lore y una tienda estratégica.
 
 ## 🧰 Tecnologías Utilizadas
 
