@@ -1,33 +1,41 @@
-# PlanMaestro
+# 🗺️ Proyecto: Conquista Global - Estrategia por Turnos
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+## 👥 Integrantes del Grupo
+- Román Rey
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+## 🎮 Descripción Corta del Juego
 
-## Platforms
+*Conquista Global* es un videojuego de estrategia por turnos para PC, inspirado en el clásico juego de mesa argentino T.E.G. Los jugadores competirán por conquistar territorios en un mapa mundial, utilizando tácticas militares, gestión de tropas y habilidades especiales de personajes únicos. Cada jugador cuenta con un objetivo secreto que, al cumplirse, le otorgará la victoria. El juego contará con modos local y en línea, conservando la esencia del T.E.G. original y sumando innovaciones como poderes, personajes con lore y una tienda estratégica.
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+## 🧰 Tecnologías Utilizadas
 
-## Gradle
+- Lenguaje: **Java SE 17**
+- Framework: **LibGDX** (gráficos 2D, eventos, audio)
+- Arquitectura: **Cliente-Servidor** para modo multijugador online
+- Control de versiones: **Git**
+- Plataformas objetivo: **PC (escritorio)**, con posibilidad futura de expansión a Web o Móvil
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## ⚙️ Cómo Compilar y Ejecutar
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+1. Clonar el repositorio:
+    ```bash
+    git clone https://github.com/tu-usuario/tu-repo.git
+    cd tu-repo
+    ```
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+2. Importar el proyecto en un IDE compatible con Gradle (por ejemplo IntelliJ IDEA o Eclipse).
+
+3. Asegurarse de tener Java 17 instalado.
+
+4. Ejecutar el proyecto desde el módulo de escritorio:
+    ```bash
+    ./gradlew desktop:run
+    ```
+
+> **Nota:** Se requiere conexión a internet solo para el modo online.
+
+## 📌 Estado Actual del Proyecto
+
+> **Configuración inicial y estructura del proyecto.**  
+> Se han definido las tecnologías, la arquitectura, las mecánicas principales, y el alcance funcional. Se trabaja actualmente en la estructura base del motor del juego y la vista del mapa.
+
