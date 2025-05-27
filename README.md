@@ -22,20 +22,30 @@
 
 1. Clonar el repositorio:
     ```bash
-    git clone https://github.com/tu-usuario/tu-repo.git
+    git clone https://github.com/romanreyy/Plan-Maestro.git
     cd tu-repo
     ```
 
 2. Importar el proyecto en un IDE compatible con Gradle (por ejemplo IntelliJ IDEA o Eclipse).
 
-3. Asegurarse de tener Java 17 instalado.
+4. Asegurarse de tener Java 17 instalado.
 
-4. Ejecutar el proyecto desde el módulo de escritorio:
-    ```bash
-    ./gradlew desktop:run
-    ```
-
-
+5. Abrir Eclipse
+   ```bash
+   1. Abrí Eclipse.
+   2. Seleccioná **File > Import > Gradle > Existing Gradle Project**.
+   3. Navegá hasta la carpeta donde clonaste el repositorio.
+   4. Dale **Finish**. Eclipse descargará las dependencias automáticamente.
+   ```
+   
+7. Ejecutar proyecto
+   ```bash
+   1. Entras a la carpeta PlanMaestro-lwjgl3
+   2. Luego a la carpeta src/main/java
+   3. Entre al package com.miempresa.mijuego.lwjgl3
+   4. Control derecho sobre el archivo Lwjgl3Launcher.java
+   5. Toque en Run As -> Java Application
+   ```
 ## 📌 Estado Actual del Proyecto
 
 > **Configuración inicial y estructura del proyecto.**  
