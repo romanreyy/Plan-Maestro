@@ -23,7 +23,7 @@
 1. Clonar el repositorio:
     ```bash
     git clone https://github.com/romanreyy/Plan-Maestro.git
-    cd tu-repo
+    cd Plan-Maestro
     ```
 
 2. Importar el proyecto en un IDE compatible con Gradle (por ejemplo IntelliJ IDEA o Eclipse).
