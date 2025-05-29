@@ -16,36 +16,33 @@
 - Framework: **LibGDX** (gráficos 2D, eventos, audio)
 - Arquitectura: **Cliente-Servidor** para modo multijugador online
 - Control de versiones: **Git**
+- Entorno de desarrollo principal: **Eclipse IDE**  
+  *(compatible también con IntelliJ IDEA si se configura adecuadamente)*
 - Plataformas objetivo: **PC (escritorio)**, con posibilidad futura de expansión a Web o Móvil
 
 ## ⚙️ Cómo Compilar y Ejecutar
 
-1. Clonar el repositorio:
+1. **Clonar el repositorio:**
     ```bash
     git clone https://github.com/romanreyy/Plan-Maestro.git
     cd Plan-Maestro
     ```
 
-2. Importar el proyecto en un IDE compatible con Gradle (por ejemplo IntelliJ IDEA o Eclipse).
+2. **Importar el proyecto en Eclipse:**
+    - Abrí Eclipse.
+    - Seleccioná **File > Import > Gradle > Existing Gradle Project**.
+    - Navegá hasta la carpeta donde clonaste el repositorio.
+    - Hacé clic en **Finish**. Eclipse descargará las dependencias automáticamente.
 
-4. Asegurarse de tener Java 17 instalado.
+3. **Verificar Java 17:**
+    - Asegurate de tener **Java SE 17** instalado y configurado como JDK en Eclipse.
 
-5. Abrir Eclipse
-   ```bash
-   1. Abrí Eclipse.
-   2. Seleccioná **File > Import > Gradle > Existing Gradle Project**.
-   3. Navegá hasta la carpeta donde clonaste el repositorio.
-   4. Dale **Finish**. Eclipse descargará las dependencias automáticamente.
-   ```
-   
-7. Ejecutar proyecto
-   ```bash
-   1. Entras a la carpeta PlanMaestro-lwjgl3
-   2. Luego a la carpeta src/main/java
-   3. Entre al package com.miempresa.mijuego.lwjgl3
-   4. Control derecho sobre el archivo Lwjgl3Launcher.java
-   5. Toque en Run As -> Java Application
-   ```
+4. **Ejecutar el proyecto:**
+    - Navegá a la carpeta: `PlanMaestro/desktop/src/main/java`.
+    - Ingresá al package correspondiente (por ejemplo: `com.planmaestro.lwjgl3` o el que estén usando).
+    - Hacé clic derecho sobre el archivo `Lwjgl3Launcher.java`.
+    - Seleccioná **Run As > Java Application**.
+      
 ## 📌 Estado Actual del Proyecto
 
 > **Configuración inicial y estructura del proyecto.**  
