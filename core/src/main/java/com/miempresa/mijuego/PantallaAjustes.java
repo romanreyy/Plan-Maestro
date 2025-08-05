@@ -17,36 +17,28 @@ public class PantallaAjustes implements Screen {
     private MiJuegoPrincipal juego;
     private Texture texturaAjustes;
 
-    // Audio
     private Music musicaFondo;
     private Sound sonidoBoton;
 
-    // Para saber desde dónde se accedió
     private boolean vieneDeJuego;
 
-    // Volumen del juego (0-100)
     private int volumenActual = 70;
 
-    // Cursores
     private Cursor cursorEspada;
     private Cursor cursorBrujula;
     private Cursor cursorNormal;
-    private String cursorSeleccionado = "normal"; // "espada", "brujula", "normal"
+    private String cursorSeleccionado = "normal";
 
-    // Botones invisibles (coordenadas basadas en tu imagen)
-    private Rectangle areaBarraSonido;     // Área completa de la barra
+    private Rectangle areaBarraSonido;
     private Rectangle botonEspada;         // Botón cursor espada
     private Rectangle botonBrujula;        // Botón cursor brújula
     private Rectangle botonVolver;         // Botón volver
 
-    // Para convertir coordenadas
     private Vector3 posicionToque;
     private Vector2 posicionMundo;
 
-    // Control de arrastre de la barra
     private boolean arrastandoBarra = false;
 
-    // DEBUG: Shape renderer para visualizar botones
     private ShapeRenderer shapeRenderer;
 
 
@@ -56,19 +48,14 @@ public class PantallaAjustes implements Screen {
         this.posicionToque = new Vector3();
         this.posicionMundo = new Vector2();
 
-        // Cargar la textura de ajustes
         texturaAjustes = new Texture("pantalla_ajustes.png");
 
-        // Cargar audio
         cargarAudio();
 
-        // Crear cursores personalizados
         crearCursores();
 
-        // Definir botones transparentes
         inicializarBotones();
 
-        // DEBUG: Inicializar shape renderer
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -83,17 +70,14 @@ public class PantallaAjustes implements Screen {
 
     private void crearCursores() {
         try {
-            // Cursor espada
             Pixmap pixmapEspada = new Pixmap(Gdx.files.internal("cursor_espada.png"));
             cursorEspada = Gdx.graphics.newCursor(pixmapEspada, 0, 0);
             pixmapEspada.dispose();
 
-            // Cursor brújula
             Pixmap pixmapBrujula = new Pixmap(Gdx.files.internal("cursor_brujula.png"));
             cursorBrujula = Gdx.graphics.newCursor(pixmapBrujula, 0, 0);
             pixmapBrujula.dispose();
 
-            // Cursor normal se mantiene como null para usar el cursor por defecto del sistema
             cursorNormal = null;
 
         } catch (Exception e) {
@@ -105,25 +89,19 @@ public class PantallaAjustes implements Screen {
     }
 
     private void inicializarBotones() {
-        // Coordenadas ajustadas según la imagen que proporcionaste
 
-        // Área de la barra de sonido (barra horizontal naranja)
         areaBarraSonido = new Rectangle(182, 549, 560, 43);
 
-        // Botón cursor espada (cuadrado izquierdo con espada)
         botonEspada = new Rectangle(135, 250, 300, 200);
 
-        // Botón cursor brújula (cuadrado derecho con brújula)
         botonBrujula = new Rectangle(509, 250, 300, 200);
 
-        // Botón volver (botón inferior izquierdo)
         botonVolver = new Rectangle(121, 86, 540, 120);
     }
 
     @Override
     public void show() {
         if (musicaFondo != null && !vieneDeJuego) {
-            // Solo reproducir música si venimos del menú principal
             musicaFondo.play();
         }
 
@@ -146,12 +124,10 @@ public class PantallaAjustes implements Screen {
     }
 
     private void manejarInput() {
-        // ESC para salir rápido
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             salirDeAjustes();
         }
 
-        // Manejar arrastre de la barra de sonido
         if (Gdx.input.isTouched()) {
             posicionToque.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             juego.vistaVentana.unproject(posicionToque);
@@ -165,7 +141,6 @@ public class PantallaAjustes implements Screen {
             arrastandoBarra = false;
         }
 
-        // Detectar clics en botones
         if (Gdx.input.justTouched()) {
             posicionToque.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             juego.vistaVentana.unproject(posicionToque);
@@ -182,13 +157,11 @@ public class PantallaAjustes implements Screen {
     }
 
     private void actualizarVolumen(float posicionX) {
-        // Calcular porcentaje basado en la posición X dentro de la barra
         float porcentaje = (posicionX - areaBarraSonido.x) / areaBarraSonido.width;
         porcentaje = Math.max(0, Math.min(1, porcentaje)); // Clamp entre 0 y 1
 
         volumenActual = (int)(porcentaje * 100);
 
-        // Aplicar el volumen a la música actual
         if (musicaFondo != null && musicaFondo.isPlaying()) {
             musicaFondo.setVolume(porcentaje);
         }
@@ -219,7 +192,7 @@ public class PantallaAjustes implements Screen {
                         System.out.println("Cursor espada aplicado");
                     } else {
                         System.out.println("Warning: Cursor espada es null, usando cursor por defecto");
-                        Gdx.graphics.setCursor(null); // Cursor por defecto del sistema
+                        Gdx.graphics.setCursor(null);
                     }
                     break;
                 case "brujula":
@@ -228,75 +201,22 @@ public class PantallaAjustes implements Screen {
                         System.out.println("Cursor brújula aplicado");
                     } else {
                         System.out.println("Warning: Cursor brújula es null, usando cursor por defecto");
-                        Gdx.graphics.setCursor(null); // Cursor por defecto del sistema
+                        Gdx.graphics.setCursor(null);
                     }
                     break;
                 default:
-                    // Para cursor "normal" o cualquier otro caso, usar cursor por defecto del sistema
                     Gdx.graphics.setCursor(null);
                     System.out.println("Cursor por defecto aplicado");
                     break;
             }
         } catch (Exception e) {
             System.out.println("Error al aplicar cursor: " + e.getMessage());
-            // En caso de error, usar cursor por defecto
             try {
                 Gdx.graphics.setCursor(null);
             } catch (Exception fallbackError) {
                 System.out.println("Error crítico al aplicar cursor por defecto: " + fallbackError.getMessage());
             }
         }
-    }
-
-    // DEBUG: Dibujar rectángulos semitransparentes sobre los botones
-    private void dibujarBotonesDebug() {
-        shapeRenderer.setProjectionMatrix(juego.camara.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        // Botón espada - Rojo
-        shapeRenderer.setColor(1, 0, 0, 0.3f); // Rojo semitransparente
-        shapeRenderer.rect(botonEspada.x, botonEspada.y, botonEspada.width, botonEspada.height);
-
-        // Botón brújula - Verde
-        shapeRenderer.setColor(0, 1, 0, 0.3f); // Verde semitransparente
-        shapeRenderer.rect(botonBrujula.x, botonBrujula.y, botonBrujula.width, botonBrujula.height);
-
-        // Barra de sonido - Azul
-        shapeRenderer.setColor(0, 0, 1, 0.3f); // Azul semitransparente
-        shapeRenderer.rect(areaBarraSonido.x, areaBarraSonido.y, areaBarraSonido.width, areaBarraSonido.height);
-
-        // Botón volver - Amarillo
-        shapeRenderer.setColor(1, 1, 0, 0.3f); // Amarillo semitransparente
-        shapeRenderer.rect(botonVolver.x, botonVolver.y, botonVolver.width, botonVolver.height);
-
-        shapeRenderer.end();
-
-        // Dibujar bordes para mejor visibilidad
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-        // Bordes más gruesos
-        Gdx.gl.glLineWidth(3);
-
-        // Botón espada - Rojo
-        shapeRenderer.setColor(1, 0, 0, 0.8f);
-        shapeRenderer.rect(botonEspada.x, botonEspada.y, botonEspada.width, botonEspada.height);
-
-        // Botón brújula - Verde
-        shapeRenderer.setColor(0, 1, 0, 0.8f);
-        shapeRenderer.rect(botonBrujula.x, botonBrujula.y, botonBrujula.width, botonBrujula.height);
-
-        // Barra de sonido - Azul
-        shapeRenderer.setColor(0, 0, 1, 0.8f);
-        shapeRenderer.rect(areaBarraSonido.x, areaBarraSonido.y, areaBarraSonido.width, areaBarraSonido.height);
-
-        // Botón volver - Amarillo
-        shapeRenderer.setColor(1, 1, 0, 0.8f);
-        shapeRenderer.rect(botonVolver.x, botonVolver.y, botonVolver.width, botonVolver.height);
-
-        shapeRenderer.end();
-
-        // Restaurar grosor de línea
-        Gdx.gl.glLineWidth(1);
     }
 
     private void alPresionarVolver() {
@@ -311,11 +231,9 @@ public class PantallaAjustes implements Screen {
         }
 
         if (vieneDeJuego) {
-            // Volver al juego
             System.out.println("Volviendo al juego...");
             juego.setScreen(new PantallaJuego(juego));
         } else {
-            // Volver al menú principal
             System.out.println("Volviendo al menú principal...");
             juego.setScreen(new MenuPrincipal(juego));
         }
@@ -328,16 +246,12 @@ public class PantallaAjustes implements Screen {
         }
     }
 
-    // Getter para que otras pantallas puedan acceder al volumen configurado
     public static int getVolumenJuego() {
-        // En una implementación real, esto se guardaría en preferencias
-        return 70; // Valor por defecto
+        return 70;
     }
 
-    // Getter para el cursor seleccionado
     public static String getCursorSeleccionado() {
-        // En una implementación real, esto se guardaría en preferencias
-        return "normal"; // Valor por defecto
+        return "normal";
     }
 
     @Override
@@ -347,12 +261,10 @@ public class PantallaAjustes implements Screen {
 
     @Override
     public void pause() {
-        // Se ejecuta cuando el juego se pausa
     }
 
     @Override
     public void resume() {
-        // Se ejecuta cuando el juego se reanuda
     }
 
     @Override
@@ -364,7 +276,6 @@ public class PantallaAjustes implements Screen {
 
     @Override
     public void dispose() {
-        // Liberar recursos
         if (texturaAjustes != null) {
             texturaAjustes.dispose();
         }
@@ -374,7 +285,6 @@ public class PantallaAjustes implements Screen {
         if (sonidoBoton != null) {
             sonidoBoton.dispose();
         }
-        // Dispose del shape renderer
         if (shapeRenderer != null) {
             shapeRenderer.dispose();
         }

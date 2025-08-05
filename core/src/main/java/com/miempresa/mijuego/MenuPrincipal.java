@@ -14,16 +14,13 @@ public class MenuPrincipal implements Screen {
     private MiJuegoPrincipal juego;
     private Texture texturaMenu;
 
-    // Audio
     private Music musicaFondo;
     private Sound sonidoBoton;
 
-    // Botones invisibles que van sobre la imagen
     private Rectangle botonJugar;
     private Rectangle botonAjustes;
     private Rectangle botonSalir;
 
-    // Para convertir coordenadas
     private Vector3 posicionToque;
     private Vector2 posicionMundo;
 
@@ -32,13 +29,10 @@ public class MenuPrincipal implements Screen {
         this.posicionToque = new Vector3();
         this.posicionMundo = new Vector2();
 
-        // Cargar la textura del menú
         texturaMenu = new Texture("menu_principal.png");
 
-        // Cargar audio
         cargarAudio();
 
-        // Definir botones transparentes con coordenadas exactas medidas
         botonJugar = new Rectangle(669, 436, 1118, 182);   // Botón JUGAR
         botonAjustes = new Rectangle(669, 219, 1118, 182); // Botón AJUSTES
         botonSalir = new Rectangle(938, 83, 548, 111);     // Botón SALIR
@@ -95,22 +89,18 @@ public class MenuPrincipal implements Screen {
     private void alPresionarJugar() {
         reproducirSonidoBoton();
         System.out.println("Iniciando selección de personaje...");
-        // Parar música del menú antes de cambiar pantalla
         if (musicaFondo != null) {
             musicaFondo.stop();
         }
-        // Cambiar a la pantalla de selección de personaje
         juego.setScreen(new PantallaSeleccionPersonaje(juego));
     }
 
     private void alPresionarAjustes() {
         reproducirSonidoBoton();
         System.out.println("Abriendo ajustes desde menú...");
-        // Parar música del menú antes de cambiar pantalla
         if (musicaFondo != null) {
             musicaFondo.stop();
         }
-        // Cambiar a ajustes indicando que viene del menú (false = no viene del juego)
         juego.setScreen(new PantallaAjustes(juego, false));
     }
 
@@ -133,12 +123,10 @@ public class MenuPrincipal implements Screen {
 
     @Override
     public void pause() {
-        // Se ejecuta cuando el juego se pausa
     }
 
     @Override
     public void resume() {
-        // Se ejecuta cuando el juego se reanuda
     }
 
     @Override
@@ -150,7 +138,6 @@ public class MenuPrincipal implements Screen {
 
     @Override
     public void dispose() {
-        // Liberar recursos
         texturaMenu.dispose();
         if (musicaFondo != null) {
             musicaFondo.dispose();

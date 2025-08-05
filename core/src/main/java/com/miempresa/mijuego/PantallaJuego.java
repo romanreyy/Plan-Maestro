@@ -9,99 +9,180 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class PantallaJuego implements Screen {
     private MiJuegoPrincipal juego;
     private Texture texturaJuego;
+    private Texture texturaObjetivo;
+    private Texture texturaPersonaje;
     private Jugador jugadorActual;
 
-    // Para manejo de input
     private Vector3 posicionToque;
     private Vector2 posicionMundo;
 
-    // Botones invisibles de la interfaz superior
-    private Circle botonTimon;         // Botón de ajustes (timón) - CÍRCULO
-    private Rectangle botonObjetivo;   // Botón de objetivo - RECTÁNGULO
-    private Rectangle botonDerecha;    // Rectángulo a la derecha - RECTÁNGULO
-    private Circle botonCirculo;       // Círculo a la derecha del todo - CÍRCULO
+    private boolean mostrandoObjetivo = false;
+    private Rectangle areaObjetivo;
+
+    private Circle botonTimon;
+    private Rectangle botonObjetivo;
+    private Rectangle botonDerecha;
+    private Circle botonCirculo;
 
     public PantallaJuego(MiJuegoPrincipal juego) {
-        this(juego, new Jugador("Jugador por defecto")); // Usar constructor con parámetros
+        this(juego, new Jugador("Jugador por defecto"));
     }
 
     public PantallaJuego(MiJuegoPrincipal juego, Jugador jugador) {
         this.juego = juego;
-        this.jugadorActual = jugador; // NUEVO
+        this.jugadorActual = jugador;
         this.posicionToque = new Vector3();
         this.posicionMundo = new Vector2();
 
-        // Cargar la textura del juego
         texturaJuego = new Texture("pantalla_juego.png");
 
-        // Inicializar botones de la interfaz
+        texturaObjetivo = new Texture("sprite_objetivo.png");
+
+        cargarTexturaPersonaje();
+
         inicializarBotonesInterfaz();
 
-        // NUEVO: Mostrar información del jugador y personaje
-        if (jugadorActual != null && jugadorActual.tienePersonaje()) {
-            System.out.println("=== INICIANDO PARTIDA ===");
-            System.out.println(jugadorActual.getInformacionJugador());
-            System.out.println("Personaje: " + jugadorActual.getPersonajeSeleccionado().getNombre());
-            System.out.println("Habilidad: " + jugadorActual.getPersonajeSeleccionado().getHabilidad());
-            System.out.println("========================");
-        }
+        inicializarAreaObjetivo();
+
+        inicializarPartida();
     }
 
     private void inicializarBotonesInterfaz() {
-        // Coordenadas exactas de los botones
-
-        // Botón Timón (izquierda) - Ajustes - CÍRCULO
         botonTimon = new Circle(119, 1008, 53);
-
-        // Botón Objetivo (centro) - RECTÁNGULO
         botonObjetivo = new Rectangle(855, 955, 210, 105);
-
-        // Botón rectángulo derecha - RECTÁNGULO
         botonDerecha = new Rectangle(1159, 962, 456, 93);
-
-        // Botón círculo (derecha del todo) - CÍRCULO
         botonCirculo = new Circle(1810, 1008, 53);
+    }
+
+    private void inicializarAreaObjetivo() {
+        float anchoObjetivo = 600;
+        float altoObjetivo = 400;
+        float x = (MiJuegoPrincipal.ANCHO_VIRTUAL - anchoObjetivo) / 2;
+        float y = (MiJuegoPrincipal.ALTO_VIRTUAL - altoObjetivo) / 2;
+
+        areaObjetivo = new Rectangle(x, y, anchoObjetivo, altoObjetivo);
+    }
+
+    private void cargarTexturaPersonaje() {
+        if (jugadorActual.tienePersonaje()) {
+            String nombrePersonaje = jugadorActual.getPersonajeSeleccionado().getNombre();
+            String archivoTextura = obtenerArchivoTexturaPersonaje(nombrePersonaje);
+
+            try {
+                texturaPersonaje = new Texture(archivoTextura);
+                System.out.println("Cargada textura del personaje: " + archivoTextura);
+            } catch (Exception e) {
+                System.out.println("No se pudo cargar la textura: " + archivoTextura);
+                texturaPersonaje = null;
+            }
+        } else {
+            texturaPersonaje = null;
+        }
+    }
+
+    private String obtenerArchivoTexturaPersonaje(String nombrePersonaje) {
+        switch (nombrePersonaje) {
+            case "El Marinero Papá":
+                return "tropa_marinero.png";
+            case "El Pibe Piola":
+                return "tropa_pibe_piola.png";
+            case "El Villero":
+                return "tropa_villero.png";
+            case "El Mentiroso Rey":
+                return "tropa_mentiroso.png";
+            case "El Ratón del Grupo":
+                return "tropa_raton.png";
+            default:
+                return "tropa_marinero.png";
+        }
+    }
+
+    private void inicializarPartida() {
+        if (!jugadorActual.tieneObjetivo()) {
+            Jugador.asignarObjetivoAleatorio(jugadorActual);
+        }
+
+        List<Pais> todosLosPaises = Jugador.crearPaisesDelMapa();
+        Collections.shuffle(todosLosPaises);
+
+        int mitadPaises = todosLosPaises.size() / 2;
+        List<Pais> paisesDelJugador = todosLosPaises.subList(0, mitadPaises);
+        jugadorActual.asignarPaises(new ArrayList<>(paisesDelJugador));
+
+        System.out.println("=== INICIANDO PARTIDA ===");
+        System.out.println(jugadorActual.getInformacionJugador());
+        if (jugadorActual.tienePersonaje()) {
+            System.out.println("Habilidad: " + jugadorActual.getPersonajeSeleccionado().getHabilidad());
+        }
+        if (jugadorActual.tieneObjetivo()) {
+            System.out.println("Descripción del objetivo: " + jugadorActual.getObjetivoAsignado().getDescripcion());
+        }
+        System.out.println("========================");
     }
 
     @Override
     public void show() {
-        // Se ejecuta cuando se muestra esta pantalla
     }
 
     @Override
     public void render(float delta) {
-        // Limpiar pantalla
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        // Actualizar viewport y cámara
         juego.vistaVentana.apply();
         juego.loteSprites.setProjectionMatrix(juego.camara.combined);
 
-        // Manejar input
         manejarInput();
 
-        // Dibujar el sprite del juego
         juego.loteSprites.begin();
         juego.loteSprites.draw(texturaJuego, 0, 0, MiJuegoPrincipal.ANCHO_VIRTUAL, MiJuegoPrincipal.ALTO_VIRTUAL);
+
+        if (texturaPersonaje != null) {
+            float xPersonaje = botonCirculo.x - botonCirculo.radius;
+            float yPersonaje = botonCirculo.y - botonCirculo.radius;
+            float diametro = botonCirculo.radius * 2;
+
+            juego.loteSprites.draw(texturaPersonaje,
+                xPersonaje, yPersonaje,
+                diametro, diametro);
+        }
+
+        if (mostrandoObjetivo) {
+            juego.loteSprites.draw(texturaObjetivo,
+                areaObjetivo.x, areaObjetivo.y,
+                areaObjetivo.width, areaObjetivo.height);
+        }
+
         juego.loteSprites.end();
     }
 
     private void manejarInput() {
-        // Presiona ESCAPE para volver al menú principal
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             juego.setScreen(new MenuPrincipal(juego));
         }
 
-        // Detectar clics en botones
         if (Gdx.input.justTouched()) {
             posicionToque.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             juego.vistaVentana.unproject(posicionToque);
             posicionMundo.set(posicionToque.x, posicionToque.y);
 
-            // Verificar qué botón fue presionado
+            if (mostrandoObjetivo) {
+                if (areaObjetivo.contains(posicionMundo.x, posicionMundo.y)) {
+                    System.out.println("Clicó dentro del objetivo");
+                } else {
+                    mostrandoObjetivo = false;
+                    System.out.println("Cerrando pantalla de objetivo");
+                }
+                return;
+            }
+
             if (botonTimon.contains(posicionMundo.x, posicionMundo.y)) {
                 alPresionarTimon();
             } else if (botonObjetivo.contains(posicionMundo.x, posicionMundo.y)) {
@@ -116,51 +197,65 @@ public class PantallaJuego implements Screen {
 
     private void alPresionarTimon() {
         System.out.println("Abriendo ajustes desde juego...");
-        // Cambiar a ajustes indicando que viene del juego (true = viene del juego)
         juego.setScreen(new PantallaAjustes(juego, true));
     }
 
     private void alPresionarObjetivo() {
-        System.out.println("Mostrando objetivos...");
-        // Aquí podrías mostrar una ventana emergente con los objetivos
-        // o cambiar a una pantalla de objetivos
+        mostrandoObjetivo = true;
+        System.out.println("=== MOSTRANDO OBJETIVO ===");
+        if (jugadorActual.tieneObjetivo()) {
+            Objetivo objetivo = jugadorActual.getObjetivoAsignado();
+            System.out.println("Objetivo: " + objetivo.getNombre());
+            System.out.println("Descripción: " + objetivo.getDescripcion());
+        } else {
+            System.out.println("No tienes objetivo asignado");
+        }
+        System.out.println("Países controlados: " + jugadorActual.getPaisesControlados().size());
+        System.out.println("=========================");
     }
 
     private void alPresionarBotonDerecha() {
         System.out.println("Botón derecha presionado...");
-        // Implementar la funcionalidad que necesites
     }
 
     private void alPresionarCirculo() {
-        System.out.println("Círculo presionado...");
-        // Implementar la funcionalidad que necesites
+        System.out.println("=== INFORMACIÓN DEL PERSONAJE ===");
+        if (jugadorActual.tienePersonaje()) {
+            Personaje personaje = jugadorActual.getPersonajeSeleccionado();
+            System.out.println("Personaje: " + personaje.getNombre());
+            System.out.println("Descripción: " + personaje.getDescripcion());
+            System.out.println("Habilidad: " + personaje.getHabilidad());
+        } else {
+            System.out.println("No tienes personaje asignado");
+        }
+        System.out.println("=================================");
     }
 
     @Override
     public void resize(int ancho, int alto) {
-        // Actualizar viewport cuando se redimensiona la ventana
         juego.vistaVentana.update(ancho, alto);
     }
 
     @Override
     public void pause() {
-        // Se ejecuta cuando el juego se pausa
     }
 
     @Override
     public void resume() {
-        // Se ejecuta cuando el juego se reanuda
     }
 
     @Override
     public void hide() {
-        // Se ejecuta cuando esta pantalla se oculta
     }
 
     @Override
     public void dispose() {
-        // Liberar recursos
         texturaJuego.dispose();
+        texturaObjetivo.dispose();
+
+        if (texturaPersonaje != null) {
+            texturaPersonaje.dispose();
+        }
     }
 
     public Jugador getJugadorActual() {

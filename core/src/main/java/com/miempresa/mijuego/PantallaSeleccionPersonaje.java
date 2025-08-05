@@ -107,7 +107,6 @@ public class PantallaSeleccionPersonaje implements Screen {
             posicionMundo.set(posicionToque.x, posicionToque.y);
 
 
-            // Verificar selección de personaje
             for (int i = 0; i < botonesPersonajes.length; i++) {
                 if (botonesPersonajes[i].contains(posicionMundo.x, posicionMundo.y)) {
                     seleccionarPersonaje(i);
@@ -115,7 +114,6 @@ public class PantallaSeleccionPersonaje implements Screen {
                 }
             }
 
-            // Verificar clic en aceptar
             if (botonAceptar.contains(posicionMundo.x, posicionMundo.y)) {
                 confirmarSeleccion();
             }
