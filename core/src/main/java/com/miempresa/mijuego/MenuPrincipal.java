@@ -40,7 +40,7 @@ public class MenuPrincipal implements Screen {
 
     private void cargarAudio() {
         try {
-            musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("sonido_menu_principal.mp3"));
+            musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("musica_menu_principal.ogg"));
             musicaFondo.setVolume(0.7f);
 
         } catch (Exception e) {
