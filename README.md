@@ -15,7 +15,7 @@ El juego presenta **5 personajes únicos** con trasfondos narrativos propios y h
 - Mapa mundial con 42 países distribuidos en 6 continentes
 
 **Enlace a la Wiki del Proyecto (Propuesta Detallada):**  
-[Ver la Propuesta Completa del Proyecto aquí](https://github.com/romanreyy/Plan-Maestro/wiki/Propuesta%E2%80%90del%E2%80%90Proyecto)
+[Ver la Propuesta Completa del Proyecto aquí](https://github.com/romanreyy/Plan-Maestro/wiki/Porpuesta-de-Tema)
 
 ## 🎥 Trailer
 
