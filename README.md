@@ -10,6 +10,13 @@
 **Enlace a la Wiki del Proyecto (Propuesta Detallada):**
 [Ver la Propuesta Completa del Proyecto aquí](https://github.com/romanreyy/Plan-Maestro/wiki/Propuesta%E2%80%90del%E2%80%90Proyecto)
 
+## 🎥 Trailer
+
+Podés ver una demostración en el siguiente video:
+
+[▶️ Ver video de avance en Google Drive](https://drive.google.com/file/d/1iaQQVuStJvs_-d3Dk3H9DJW9VwMi7bec/view?usp=sharing)
+
+
 ## 🧰 Tecnologías Utilizadas
 
 - Lenguaje: **Java SE 17**
