@@ -144,19 +144,19 @@ public class PantallaSeleccionPersonaje implements Screen {
 
         switch (indice) {
             case 0:
-                rutaMusica = "musica_marinero.mp3";
+                rutaMusica = "musica_marinero.ogg";
                 break;
             case 1:
-                rutaMusica = "musica_pibepiola.mp3";
+                rutaMusica = "musica_pibepiola.ogg";
                 break;
             case 2:
-                rutaMusica = "musica_villero.mp3";
+                rutaMusica = "musica_villero.ogg";
                 break;
             case 3:
-                rutaMusica = "musica_mentiroso.mp3";
+                rutaMusica = "musica_mentiroso.ogg";
                 break;
             case 4:
-                rutaMusica = "musica_raton.mp3";
+                rutaMusica = "musica_raton.ogg";
                 break;
         }
 
