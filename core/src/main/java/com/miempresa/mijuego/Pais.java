@@ -1,21 +1,20 @@
 package com.miempresa.mijuego;
 
-public class Pais {
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
+
+public abstract class Pais {
     private String nombre;
+    private ArrayList<Pais> limitrofes;
     private Jugador propietario;
 
-    public Pais(String nombre) {
+    public Pais(String nombre, ArrayList<String> limitrofes) {
         this.nombre = nombre;
+        this.limitrofes = new ArrayList<>();
         this.propietario = null;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public Jugador getPropietario() {
-        return propietario;
-    }
 
     public void setPropietario(Jugador propietario) {
         this.propietario = propietario;
