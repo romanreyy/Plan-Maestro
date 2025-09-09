@@ -10,6 +10,7 @@ public class Chile extends Pais{
             new ArrayList<String>(){{
                 add("Peru");
                 add("Argentina");
+                add("Australia");
             }}
         );
     }
