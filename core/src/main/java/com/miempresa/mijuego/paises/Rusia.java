@@ -11,7 +11,7 @@ public class Rusia extends Pais{
                 add("Abal");
                 add("Iran");
                 add("Polonia");
-                add("Arabia");
+                add("Turquia");
                 add("Alemania");
             }}
         );

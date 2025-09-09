@@ -2,16 +2,15 @@ package com.miempresa.mijuego.paises;
 
 import java.util.ArrayList;
 
-public class Polonia extends Pais{
-    public Polonia(){
+public class Israel extends Pais{
+    public Israel(){
         super(
-            "Polonia",
-            "Europa",
+            "Israel",
+            "Asia",
             new ArrayList<String>(){{
-                add("Rusia");
-                add("Alemania");
                 add("Turquia");
                 add("Egipto");
+                add("Arabia");
             }}
         );
     }

@@ -2,16 +2,15 @@ package com.miempresa.mijuego.paises;
 
 import java.util.ArrayList;
 
-public class Abal extends Pais{
-    public Abal(){
+public class Arabia extends Pais{
+    public Arabia(){
         super(
-            "Abal",
+            "Arabia",
             "Asia",
             new ArrayList<String>(){{
-                add("Tartaria");
-                add("Siberia");
-                add("Rusia");
                 add("Iran");
+                add("Tuquia");
+                add("Israel");
             }}
         );
     }

@@ -6,7 +6,7 @@ public class Iran extends Pais{
     public Iran(){
         super(
             "Iran",
-            "Europa",
+            "Asia",
             new ArrayList<String>(){{
                 add("Abal");
                 add("Siberia");
@@ -15,6 +15,7 @@ public class Iran extends Pais{
                 add("India");
                 add("Arabia");
                 add("Rusia");
+                add("Turquia");
             }}
         );
     }
