@@ -1,6 +1,6 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.personajes;
 
-class RatonDelGrupo extends Personaje {
+public class RatonDelGrupo extends Personaje {
     public RatonDelGrupo() {
         super(
             "El Ratón del Grupo",

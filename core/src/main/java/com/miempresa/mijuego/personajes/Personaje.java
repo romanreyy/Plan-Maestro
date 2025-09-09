@@ -1,9 +1,9 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.personajes;
 
 public abstract class Personaje {
-    protected String nombre;
-    protected String descripcion;
-    protected String habilidad;
+    private String nombre;
+    private String descripcion;
+    private String habilidad;
 
     public Personaje(String nombre, String descripcion, String habilidad) {
         this.nombre = nombre;

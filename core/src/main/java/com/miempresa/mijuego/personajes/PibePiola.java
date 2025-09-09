@@ -1,6 +1,6 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.personajes;
 
-class PibePiola extends Personaje {
+public class PibePiola extends Personaje {
     public PibePiola() {
         super(
             "El Pibe Piola",

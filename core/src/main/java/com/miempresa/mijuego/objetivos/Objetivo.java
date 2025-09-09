@@ -1,8 +1,8 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.objetivos;
 
 public abstract class Objetivo {
-    protected String nombre;
-    protected String descripcion;
+    private String nombre;
+    private String descripcion;
 
     public Objetivo(String nombre, String descripcion) {
         this.nombre = nombre;

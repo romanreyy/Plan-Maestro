@@ -1,4 +1,4 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,6 +8,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.miempresa.mijuego.objetivos.Objetivo;
+import com.miempresa.mijuego.personajes.Jugador;
+import com.miempresa.mijuego.paises.Pais;
+import com.miempresa.mijuego.personajes.Personaje;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,13 +113,6 @@ public class PantallaJuego implements Screen {
         if (!jugadorActual.tieneObjetivo()) {
             Jugador.asignarObjetivoAleatorio(jugadorActual);
         }
-
-        List<Pais> todosLosPaises = Jugador.crearPaisesDelMapa();
-        Collections.shuffle(todosLosPaises);
-
-        int mitadPaises = todosLosPaises.size() / 2;
-        List<Pais> paisesDelJugador = todosLosPaises.subList(0, mitadPaises);
-        jugadorActual.asignarPaises(new ArrayList<>(paisesDelJugador));
 
         System.out.println("=== INICIANDO PARTIDA ===");
         System.out.println(jugadorActual.getInformacionJugador());

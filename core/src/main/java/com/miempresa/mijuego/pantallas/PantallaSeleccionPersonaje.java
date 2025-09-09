@@ -1,4 +1,4 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.miempresa.mijuego.personajes.*;
 
 public class PantallaSeleccionPersonaje implements Screen {
     private MiJuegoPrincipal juego;

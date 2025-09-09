@@ -1,6 +1,6 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.personajes;
 
-class MentirosoRey extends Personaje {
+public class MentirosoRey extends Personaje {
     public MentirosoRey() {
         super(
             "El Mentiroso Rey",

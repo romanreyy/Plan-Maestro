@@ -1,6 +1,6 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.objetivos;
 
-class PlanDominacion extends Objetivo {
+public class PlanDominacion extends Objetivo {
     public PlanDominacion() {
         super(
             "Plan Dominacion",

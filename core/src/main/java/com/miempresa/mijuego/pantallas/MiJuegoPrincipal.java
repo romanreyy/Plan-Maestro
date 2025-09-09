@@ -1,4 +1,4 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.pantallas;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

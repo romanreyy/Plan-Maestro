@@ -1,4 +1,4 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

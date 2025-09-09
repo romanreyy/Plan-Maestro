@@ -1,6 +1,6 @@
-package com.miempresa.mijuego;
+package com.miempresa.mijuego.personajes;
 
-class MarineroPapa extends Personaje {
+public class MarineroPapa extends Personaje {
     public MarineroPapa() {
         super(
             "El Marinero Papá",

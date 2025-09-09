@@ -2,7 +2,7 @@ package com.miempresa.mijuego.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.miempresa.mijuego.MiJuegoPrincipal;
+import com.miempresa.mijuego.pantallas.MiJuegoPrincipal;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
