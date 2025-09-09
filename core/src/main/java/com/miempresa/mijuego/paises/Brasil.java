@@ -12,6 +12,7 @@ class Brasil extends Pais{
                 add("Colombia");
                 add("Argentina");
                 add("Uruguay");
+                add("Sahara");
             }}
         );
     }
