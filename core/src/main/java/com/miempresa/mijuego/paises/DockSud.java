@@ -2,7 +2,7 @@ package com.miempresa.mijuego.paises;
 
 import java.util.ArrayList;
 
-class DockSud extends Pais{
+public class DockSud extends Pais{
     public DockSud(){
         super(
             "Dock Sud",

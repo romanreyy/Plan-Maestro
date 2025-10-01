@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.miempresa.mijuego.paises.Pais;
 import com.miempresa.mijuego.personajes.*;
 
 public class PantallaSeleccionPersonaje implements Screen {
@@ -182,6 +183,14 @@ public class PantallaSeleccionPersonaje implements Screen {
         }
 
         jugador.asignarPersonaje(personajesDisponibles[personajeSeleccionado]);
+        Jugador.asignarPaisesAleatorios(jugador);
+        Jugador.asignarObjetivoAleatorio(jugador);
+
+        // Debug (opcional, para consola)
+        System.out.println(jugador.getInformacionJugador());
+        for (Pais p : jugador.getPaisesControlados()) {
+            System.out.println(" - " + p.getNombre());
+        }
 
         juego.setScreen(new PantallaJuego(juego, jugador));
     }

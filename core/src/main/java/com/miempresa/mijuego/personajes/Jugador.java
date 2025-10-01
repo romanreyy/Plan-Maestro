@@ -2,6 +2,7 @@ package com.miempresa.mijuego.personajes;
 
 import com.miempresa.mijuego.objetivos.*;
 import com.miempresa.mijuego.paises.Pais;
+import com.miempresa.mijuego.paises.*;
 
 import java.util.*;
 
@@ -14,13 +15,6 @@ public class Jugador {
     public Jugador(String nombre) {
         this.nombre = nombre;
         this.personajeSeleccionado = null;
-        this.objetivoAsignado = null;
-        this.paisesControlados = new ArrayList<>();
-    }
-
-    public Jugador(String nombre, Personaje personaje) {
-        this.nombre = nombre;
-        this.personajeSeleccionado = personaje;
         this.objetivoAsignado = null;
         this.paisesControlados = new ArrayList<>();
     }
@@ -105,5 +99,65 @@ public class Jugador {
         Random random = new Random();
         Objetivo objetivoAleatorio = objetivosDisponibles[random.nextInt(objetivosDisponibles.length)];
         jugador.asignarObjetivo(objetivoAleatorio);
+    }
+
+    public static void asignarPaisesAleatorios(Jugador jugador) {
+        ArrayList<Pais> paisesDisponibles = new ArrayList<>();
+        paisesDisponibles.add(new BajoFlores());
+        paisesDisponibles.add(new BarrioPiolin());
+        paisesDisponibles.add(new BarrioSanJorge());
+        paisesDisponibles.add(new Belgrano());
+        paisesDisponibles.add(new CiudadOculta());
+        paisesDisponibles.add(new Constitucion());
+        paisesDisponibles.add(new CuartelV());
+        paisesDisponibles.add(new Devoto());
+        paisesDisponibles.add(new DockSud());
+        paisesDisponibles.add(new DonOrione());
+        paisesDisponibles.add(new ElJardin());
+        paisesDisponibles.add(new Emebe04PuntaDeRielesNuevos());
+        paisesDisponibles.add(new FuerteApache());
+        paisesDisponibles.add(new GonzalezCatan());
+        paisesDisponibles.add(new Hidalgo());
+        paisesDisponibles.add(new IsidroCasanova());
+        paisesDisponibles.add(new JoseCPaz());
+        paisesDisponibles.add(new La18());
+        paisesDisponibles.add(new LaCatanga());
+        paisesDisponibles.add(new LaCurita());
+        paisesDisponibles.add(new LaFraga());
+        paisesDisponibles.add(new LaRana());
+        paisesDisponibles.add(new LaRodrigoBueno());
+        paisesDisponibles.add(new LaTranquila());
+        paisesDisponibles.add(new Laferrere());
+        paisesDisponibles.add(new LasTunas());
+        paisesDisponibles.add(new MarianoAcosta());
+        paisesDisponibles.add(new MonteChingolo());
+        paisesDisponibles.add(new Nordelta());
+        paisesDisponibles.add(new NuevaPompeya());
+        paisesDisponibles.add(new Olivos());
+        paisesDisponibles.add(new Once());
+        paisesDisponibles.add(new PabloMugica());
+        paisesDisponibles.add(new Palermo());
+        paisesDisponibles.add(new PuertoMadero());
+        paisesDisponibles.add(new Recoleta());
+        paisesDisponibles.add(new Saavedra());
+        paisesDisponibles.add(new SanCayetano());
+        paisesDisponibles.add(new SanIsidro());
+        paisesDisponibles.add(new Villa31());
+        paisesDisponibles.add(new VillaCarlosGardel());
+        paisesDisponibles.add(new VillaFiorito());
+        paisesDisponibles.add(new VillaItati());
+        paisesDisponibles.add(new VillaLanzone());
+        paisesDisponibles.add(new VillaPalito());
+        paisesDisponibles.add(new VillaSoldati());
+        paisesDisponibles.add(new VirreyDelPino());
+
+
+        Collections.shuffle(paisesDisponibles);
+
+        ArrayList<Pais> paisesAsignados = new ArrayList<>(
+            paisesDisponibles.subList(0, Math.min(16, paisesDisponibles.size()))
+        );
+
+        jugador.asignarPaises(paisesAsignados);
     }
 }

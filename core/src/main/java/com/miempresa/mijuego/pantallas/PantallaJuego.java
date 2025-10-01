@@ -10,13 +10,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.miempresa.mijuego.objetivos.Objetivo;
 import com.miempresa.mijuego.personajes.Jugador;
-import com.miempresa.mijuego.paises.Pais;
 import com.miempresa.mijuego.personajes.Personaje;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class PantallaJuego implements Screen {
     private MiJuegoPrincipal juego;
@@ -36,6 +31,7 @@ public class PantallaJuego implements Screen {
     private Rectangle botonDerecha;
     private Circle botonCirculo;
 
+
     public PantallaJuego(MiJuegoPrincipal juego) {
         this(juego, new Jugador("Jugador por defecto"));
     }
@@ -47,16 +43,13 @@ public class PantallaJuego implements Screen {
         this.posicionMundo = new Vector2();
 
         texturaJuego = new Texture("pantalla_juego.png");
-
         texturaObjetivo = new Texture("sprite_objetivo.png");
 
         cargarTexturaPersonaje();
-
         inicializarBotonesInterfaz();
-
         inicializarAreaObjetivo();
-
         inicializarPartida();
+
     }
 
     private void inicializarBotonesInterfaz() {
@@ -126,8 +119,7 @@ public class PantallaJuego implements Screen {
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -138,8 +130,11 @@ public class PantallaJuego implements Screen {
 
         manejarInput();
 
+        // --- SPRITEBATCH ---
         juego.loteSprites.begin();
-        juego.loteSprites.draw(texturaJuego, 0, 0, MiJuegoPrincipal.ANCHO_VIRTUAL, MiJuegoPrincipal.ALTO_VIRTUAL);
+        juego.loteSprites.draw(texturaJuego, 0, 0,
+            MiJuegoPrincipal.ANCHO_VIRTUAL,
+            MiJuegoPrincipal.ALTO_VIRTUAL);
 
         if (texturaPersonaje != null) {
             float xPersonaje = botonCirculo.x - botonCirculo.radius;
@@ -156,8 +151,8 @@ public class PantallaJuego implements Screen {
                 areaObjetivo.x, areaObjetivo.y,
                 areaObjetivo.width, areaObjetivo.height);
         }
-
         juego.loteSprites.end();
+
     }
 
     private void manejarInput() {
@@ -189,6 +184,7 @@ public class PantallaJuego implements Screen {
             } else if (botonCirculo.contains(posicionMundo.x, posicionMundo.y)) {
                 alPresionarCirculo();
             }
+
         }
     }
 
@@ -234,25 +230,22 @@ public class PantallaJuego implements Screen {
     }
 
     @Override
-    public void pause() {
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
         texturaJuego.dispose();
         texturaObjetivo.dispose();
-
         if (texturaPersonaje != null) {
             texturaPersonaje.dispose();
         }
+        shapeRenderer.dispose(); // 🔹 liberar recursos
     }
 
     public Jugador getJugadorActual() {
