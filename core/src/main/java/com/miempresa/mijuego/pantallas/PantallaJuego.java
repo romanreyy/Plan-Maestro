@@ -127,36 +127,206 @@ public class PantallaJuego implements Screen {
         System.out.println("========================");
     }
 
-    // =====================================================
-    // SPRITES DE PAÍSES
-    // =====================================================
     private void inicializarSpritesPaises() {
         spritesPaises = new HashMap<>();
 
-        Sprite saavedra = new Sprite(new Texture("saavedra.png"));
-        saavedra.setPosition(200, 654);
-        spritesPaises.put("Saavedra", saavedra);
+        Sprite villaLaCava = new Sprite(new Texture("villaLaCava.png"));
+        villaLaCava.setPosition(0, 0);
+        spritesPaises.put("Villa la Cava", villaLaCava);
 
-        Sprite palermo = new Sprite(new Texture("palermo.png"));
-        palermo.setPosition(242, 868);
-        spritesPaises.put("Palermo", palermo);
+        Sprite bajoFlores = new Sprite(new Texture("bajoFlores.png"));
+        bajoFlores.setPosition(0, 0);
+        spritesPaises.put("Bajo Flores", bajoFlores);
 
-        Sprite belgrano = new Sprite(new Texture("belgrano.png"));
-        belgrano.setPosition(67, 602);
-        spritesPaises.put("Belgrano", belgrano);
+        Sprite pabloMugica = new Sprite(new Texture("pabloMugica.png"));
+        pabloMugica.setPosition(0, 0);
+        spritesPaises.put("Pablo Mugica", pabloMugica);
+
+        Sprite laRodrigoBueno = new Sprite(new Texture("laRodrigoBueno.png"));
+        laRodrigoBueno.setPosition(0, 0);
+        spritesPaises.put("La Rodrigo Bueno", laRodrigoBueno);
+
+        Sprite virreyDelPino = new Sprite(new Texture("virreyDelPino.png"));
+        virreyDelPino.setPosition(0, 0);
+        spritesPaises.put("Virrey del Pino", virreyDelPino);
+
+        Sprite gonzalezCatan = new Sprite(new Texture("gonzalezCatan.png"));
+        gonzalezCatan.setPosition(0, 0);
+        spritesPaises.put("Gonzalez Catan", gonzalezCatan);
+
+        Sprite isidroCasanova = new Sprite(new Texture("isidroCasanova.png"));
+        isidroCasanova.setPosition(0, 0);
+        spritesPaises.put("Isidro Casanova", isidroCasanova);
+
+        Sprite laferrere = new Sprite(new Texture("laferrere.png"));
+        laferrere.setPosition(0, 0);
+        spritesPaises.put("Laferrere", laferrere);
+
+        Sprite villaItati = new Sprite(new Texture("villaItati.png"));
+        villaItati.setPosition(0, 0);
+        spritesPaises.put("Villa Itati", villaItati);
+
+        Sprite monteChingolo = new Sprite(new Texture("monteChingolo.png"));
+        monteChingolo.setPosition(0, 0);
+        spritesPaises.put("Monte Chingolo", monteChingolo);
+
+        Sprite dockSud = new Sprite(new Texture("dockSud.png"));
+        dockSud.setPosition(0, 0);
+        spritesPaises.put("Dock Sud", dockSud);
+
+        Sprite laTranquila = new Sprite(new Texture("laTranquila.png"));
+        laTranquila.setPosition(0, 0);
+        spritesPaises.put("La Tranquila", laTranquila);
+
+        Sprite laRana = new Sprite(new Texture("laRana.png"));
+        laRana.setPosition(0, 0);
+        spritesPaises.put("La Rana", laRana);
+
+        Sprite villaCarlosGardel = new Sprite(new Texture("villaCarlosGardel.png"));
+        villaCarlosGardel.setPosition(0, 0);
+        spritesPaises.put("Villa Carlos Gardel", villaCarlosGardel);
+
+        Sprite fuerteApache = new Sprite(new Texture("fuerteApache.png"));
+        fuerteApache.setPosition(0, 0);
+        spritesPaises.put("Fuerte Apache", fuerteApache);
+
+        Sprite cuartelV = new Sprite(new Texture("cuartelV.png"));
+        cuartelV.setPosition(0, 0);
+        spritesPaises.put("Cuartel V", cuartelV);
+
+        Sprite joseCPaz = new Sprite(new Texture("joseCPaz.png"));
+        joseCPaz.setPosition(0, 0);
+        spritesPaises.put("Jose C. Paz", joseCPaz);
+
+        Sprite lasTunas = new Sprite(new Texture("lasTunas.png"));
+        lasTunas.setPosition(0, 0);
+        spritesPaises.put("Las Tunas", lasTunas);
+
+        Sprite laCatanga = new Sprite(new Texture("laCatanga.png"));
+        laCatanga.setPosition(0, 0);
+        spritesPaises.put("La Catanga", laCatanga);
+
+        Sprite villa18 = new Sprite(new Texture("villa18.png"));
+        villa18.setPosition(0, 0);
+        spritesPaises.put("Villa 18", villa18);
+
+        Sprite barrioPiolin = new Sprite(new Texture("barrioPiolin.png"));
+        barrioPiolin.setPosition(0, 0);
+        spritesPaises.put("Barrio Piolin", barrioPiolin);
+
+        Sprite villaLanzone = new Sprite(new Texture("villaLanzone.png"));
+        villaLanzone.setPosition(0, 0);
+        spritesPaises.put("Villa Lanzone", villaLanzone);
+
+        Sprite hidalgo = new Sprite(new Texture("hidalgo.png"));
+        hidalgo.setPosition(0, 0);
+        spritesPaises.put("Hidalgo", hidalgo);
 
         Sprite villa31 = new Sprite(new Texture("villa31.png"));
-        villa31.setPosition(1752, 319);
+        villa31.setPosition(0, 0);
         spritesPaises.put("Villa 31", villa31);
 
-        Sprite lafraga = new Sprite(new Texture("lafraga.png"));
-        lafraga.setPosition(1888, 390);
-        spritesPaises.put("La Fraga", lafraga);
+        Sprite laCurita = new Sprite(new Texture("laCurita.png"));
+        laCurita.setPosition(0, 0);
+        spritesPaises.put("La Curita", laCurita);
+
+        Sprite villaSoldati = new Sprite(new Texture("villaSoldati.png"));
+        villaSoldati.setPosition(0, 0);
+        spritesPaises.put("Villa Soldati", villaSoldati);
+
+        Sprite nuevaPompeya = new Sprite(new Texture("nuevaPompeya.png"));
+        nuevaPompeya.setPosition(0, 0);
+        spritesPaises.put("Nueva Pompeya", nuevaPompeya);
+
+        Sprite constitucion = new Sprite(new Texture("constitucion.png"));
+        constitucion.setPosition(0, 0);
+        spritesPaises.put("Constitucion", constitucion);
+
+        Sprite once = new Sprite(new Texture("once.png"));
+        once.setPosition(0, 0);
+        spritesPaises.put("Once", once);
+
+        Sprite donOrione = new Sprite(new Texture("donOrione.png"));
+        donOrione.setPosition(0, 0);
+        spritesPaises.put("Don Orione", donOrione);
+
+        Sprite emebe04PuntaDeRielesNuevos = new Sprite(new Texture("emebe04PuntaDeRielesNuevos.png"));
+        emebe04PuntaDeRielesNuevos.setPosition(0, 0);
+        spritesPaises.put("Emebe 04 Punta de Rieles Nuevos", emebe04PuntaDeRielesNuevos);
+
+        Sprite ciudadOculta = new Sprite(new Texture("ciudadOculta.png"));
+        ciudadOculta.setPosition(0, 0);
+        spritesPaises.put("Ciudad Oculta", ciudadOculta);
+
+        Sprite laFraga = new Sprite(new Texture("lafraga.png"));
+        laFraga.setPosition(0, 0);
+        spritesPaises.put("La Fraga", laFraga);
+
+        Sprite villaFiorito = new Sprite(new Texture("villaFiorito.png"));
+        villaFiorito.setPosition(0, 0);
+        spritesPaises.put("Villa Fiorito", villaFiorito);
+
+        Sprite marianoAcosta = new Sprite(new Texture("marianoAcosta.png"));
+        marianoAcosta.setPosition(0, 0);
+        spritesPaises.put("Mariano Acosta", marianoAcosta);
+
+        Sprite sanCayetano = new Sprite(new Texture("sanCayetano.png"));
+        sanCayetano.setPosition(0, 0);
+        spritesPaises.put("San Cayetano", sanCayetano);
+
+        Sprite villaPalito = new Sprite(new Texture("villaPalito.png"));
+        villaPalito.setPosition(0, 0);
+        spritesPaises.put("Villa Palito", villaPalito);
+
+        Sprite elJardin = new Sprite(new Texture("elJardin.png"));
+        elJardin.setPosition(0, 0);
+        spritesPaises.put("El Jardin", elJardin);
+
+        Sprite ingenieroBudge = new Sprite(new Texture("ingenieroBudge.png"));
+        ingenieroBudge.setPosition(0, 0);
+        spritesPaises.put("Ingeniero Budge", ingenieroBudge);
+
+        Sprite barrioSanJorge = new Sprite(new Texture("barrioSanJorge.png"));
+        barrioSanJorge.setPosition(0, 0);
+        spritesPaises.put("Barrio San Jorge", barrioSanJorge);
+
+        Sprite nordelta = new Sprite(new Texture("nordelta.png"));
+        nordelta.setPosition(0, 0);
+        spritesPaises.put("Nordelta", nordelta);
+
+        Sprite palermo = new Sprite(new Texture("palermo.png"));
+        palermo.setPosition(0, 0);
+        spritesPaises.put("Palermo", palermo);
+
+        Sprite devoto = new Sprite(new Texture("devoto.png"));
+        devoto.setPosition(0, 0);
+        spritesPaises.put("Devoto", devoto);
+
+        Sprite olivos = new Sprite(new Texture("olivos.png"));
+        olivos.setPosition(0, 0);
+        spritesPaises.put("Olivos", olivos);
+
+        Sprite sanIsidro = new Sprite(new Texture("sanIsidro.png"));
+        sanIsidro.setPosition(0, 0);
+        spritesPaises.put("San Isidro", sanIsidro);
+
+        Sprite saavedra = new Sprite(new Texture("saavedra.png"));
+        saavedra.setPosition(0, 0);
+        spritesPaises.put("Saavedra", saavedra);
+
+        Sprite puertoMadero = new Sprite(new Texture("puertoMadero.png"));
+        puertoMadero.setPosition(0, 0);
+        spritesPaises.put("Puerto Madero", puertoMadero);
+
+        Sprite nunez = new Sprite(new Texture("nunez.png"));
+        nunez.setPosition(0, 0);
+        spritesPaises.put("Nuñez", nunez);
+
+        Sprite belgrano = new Sprite(new Texture("belgrano.png"));
+        belgrano.setPosition(0, 0);
+        spritesPaises.put("Belgrano", belgrano);
     }
 
-    // =====================================================
-    // ACTUALIZACIÓN DE COLORES
-    // =====================================================
     public void actualizarColoresPaises() {
         if (spritesPaises == null || jugadorActual == null) return;
 
@@ -236,7 +406,7 @@ public class PantallaJuego implements Screen {
             posicionToque.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             juego.vistaVentana.unproject(posicionToque);
             posicionMundo.set(posicionToque.x, posicionToque.y);
-
+            System.out.println("Click en posición: X=" + posicionMundo.x + ", Y=" + posicionMundo.y);
             if (mostrandoObjetivo) {
                 if (!areaObjetivo.contains(posicionMundo.x, posicionMundo.y)) {
                     mostrandoObjetivo = false;

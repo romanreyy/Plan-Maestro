@@ -133,6 +133,7 @@ public class Jugador {
         paisesDisponibles.add(new MonteChingolo());
         paisesDisponibles.add(new Nordelta());
         paisesDisponibles.add(new NuevaPompeya());
+        paisesDisponibles.add(new Nunez());
         paisesDisponibles.add(new Olivos());
         paisesDisponibles.add(new Once());
         paisesDisponibles.add(new PabloMugica());
