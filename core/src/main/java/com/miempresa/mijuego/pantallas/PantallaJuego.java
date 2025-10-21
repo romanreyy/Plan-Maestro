@@ -145,11 +145,12 @@ public class PantallaJuego implements Screen {
         laRodrigoBueno.setPosition(1450, 485);
         laRodrigoBueno.setScale(1.5f);
         spritesPaises.put("La Rodrigo Bueno", laRodrigoBueno);
-/*
+
         Sprite virreyDelPino = new Sprite(new Texture("virreyDelPino.png"));
-        virreyDelPino.setPosition(0, 0);
+        virreyDelPino.setPosition(1545, 580);
+        virreyDelPino.setScale(1.5f);
         spritesPaises.put("Virrey del Pino", virreyDelPino);
-*/
+
         Sprite gonzalezCatan = new Sprite(new Texture("gonzalezCatan.png"));
         gonzalezCatan.setPosition(1375, 215);
         gonzalezCatan.setScale(1.8f);
@@ -164,11 +165,12 @@ public class PantallaJuego implements Screen {
         laferrere.setPosition(480, 180);
         laferrere.setScale(1.5f);
         spritesPaises.put("Laferrere", laferrere);
-/*
-        Sprite villaItati = new Sprite(new Texture("villaItati.png"));
-        villaItati.setPosition(0, 0);
-        spritesPaises.put("Villa Itati", villaItati);
 
+        Sprite villaItati = new Sprite(new Texture("villaItati.png"));
+        villaItati.setPosition(1160, 740);
+        villaItati.setScale(1.4f);
+        spritesPaises.put("Villa Itati", villaItati);
+/*
         Sprite monteChingolo = new Sprite(new Texture("monteChingolo.png"));
         monteChingolo.setPosition(0, 0);
         spritesPaises.put("Monte Chingolo", monteChingolo);
@@ -186,11 +188,12 @@ public class PantallaJuego implements Screen {
         laRana.setPosition(1435, 770);
         laRana.setScale(1.5f);
         spritesPaises.put("La Rana", laRana);
-/*
+
         Sprite villaCarlosGardel = new Sprite(new Texture("villaCarlosGardel.png"));
-        villaCarlosGardel.setPosition(0, 0);
+        villaCarlosGardel.setPosition(1585, 390);
+        villaCarlosGardel.setScale(1.4f);
         spritesPaises.put("Villa Carlos Gardel", villaCarlosGardel);
-*/
+
         Sprite fuerteApache = new Sprite(new Texture("fuerteApache.png"));
         fuerteApache.setPosition(545, 160);
         fuerteApache.setScale(1.8f);
@@ -225,11 +228,12 @@ public class PantallaJuego implements Screen {
         barrioPiolin.setPosition(1340, 540);
         barrioPiolin.setScale(1.7f);
         spritesPaises.put("Barrio Piolin", barrioPiolin);
-/*
-        Sprite villaLanzone = new Sprite(new Texture("villaLanzone.png"));
-        villaLanzone.setPosition(0, 0);
-        spritesPaises.put("Villa Lanzone", villaLanzone);
 
+        Sprite villaLanzone = new Sprite(new Texture("villaLanzone.png"));
+        villaLanzone.setPosition(1230, 500);
+        villaLanzone.setScale(1.5f);
+        spritesPaises.put("Villa Lanzone", villaLanzone);
+/*
         Sprite hidalgo = new Sprite(new Texture("hidalgo.png"));
         hidalgo.setPosition(0, 0);
         spritesPaises.put("Hidalgo", hidalgo);
@@ -289,11 +293,12 @@ public class PantallaJuego implements Screen {
         Sprite marianoAcosta = new Sprite(new Texture("marianoAcosta.png"));
         marianoAcosta.setPosition(0, 0);
         spritesPaises.put("Mariano Acosta", marianoAcosta);
-
+*/
         Sprite sanCayetano = new Sprite(new Texture("sanCayetano.png"));
-        sanCayetano.setPosition(0, 0);
+        sanCayetano.setPosition(1515, 825);
+        sanCayetano.setScale(1.5f);
         spritesPaises.put("San Cayetano", sanCayetano);
-
+/*
         Sprite villaPalito = new Sprite(new Texture("villaPalito.png"));
         villaPalito.setPosition(0, 0);
         spritesPaises.put("Villa Palito", villaPalito);
@@ -329,11 +334,12 @@ public class PantallaJuego implements Screen {
         olivos.setPosition(150, 550);
         olivos.setScale(1.6f);
         spritesPaises.put("Olivos", olivos);
-/*
-        Sprite sanIsidro = new Sprite(new Texture("sanIsidro.png"));
-        sanIsidro.setPosition(0, 0);
-        spritesPaises.put("San Isidro", sanIsidro);
 
+        Sprite sanIsidro = new Sprite(new Texture("sanIsidro.png"));
+        sanIsidro.setPosition(285, 655);
+        sanIsidro.setScale(1.6f);
+        spritesPaises.put("San Isidro", sanIsidro);
+/*
         Sprite saavedra = new Sprite(new Texture("saavedra.png"));
         saavedra.setPosition(0, 0);
         spritesPaises.put("Saavedra", saavedra);
