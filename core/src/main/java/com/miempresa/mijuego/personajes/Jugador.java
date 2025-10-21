@@ -156,7 +156,7 @@ public class Jugador {
         Collections.shuffle(paisesDisponibles);
 
         ArrayList<Pais> paisesAsignados = new ArrayList<>(
-            paisesDisponibles.subList(0, Math.min(16, paisesDisponibles.size()))
+            paisesDisponibles.subList(0, Math.min(48, paisesDisponibles.size()))
         );
 
         jugador.asignarPaises(paisesAsignados);
