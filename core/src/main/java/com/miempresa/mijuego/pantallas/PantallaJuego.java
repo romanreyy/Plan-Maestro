@@ -314,17 +314,19 @@ public class PantallaJuego implements Screen {
         spritesPaises.put("Ingeniero Budge", ingenieroBudge);
 /*
         Sprite barrioSanJorge = new Sprite(new Texture("barrioSanJorge.png"));
-        barrioSanJorge.setPosition(0, 0);
+        barrioSanJorge.setPosition(1450, 430);
         spritesPaises.put("Barrio San Jorge", barrioSanJorge);
-
+*/
         Sprite nordelta = new Sprite(new Texture("nordelta.png"));
-        nordelta.setPosition(0, 0);
+        nordelta.setPosition(490, 830);
+        nordelta.setScale(1.8f);
         spritesPaises.put("Nordelta", nordelta);
 
         Sprite palermo = new Sprite(new Texture("palermo.png"));
-        palermo.setPosition(0, 0);
+        palermo.setPosition(210, 810);
+        palermo.setScale(1.6f);
         spritesPaises.put("Palermo", palermo);
-*/
+
         Sprite devoto = new Sprite(new Texture("devoto.png"));
         devoto.setPosition(300, 445);
         devoto.setScale(1.5f);
@@ -339,23 +341,31 @@ public class PantallaJuego implements Screen {
         sanIsidro.setPosition(285, 655);
         sanIsidro.setScale(1.6f);
         spritesPaises.put("San Isidro", sanIsidro);
-/*
+
         Sprite saavedra = new Sprite(new Texture("saavedra.png"));
-        saavedra.setPosition(0, 0);
+        saavedra.setPosition(225, 595);
+        saavedra.setScale(1.7f);
         spritesPaises.put("Saavedra", saavedra);
 
         Sprite puertoMadero = new Sprite(new Texture("puertoMadero.png"));
-        puertoMadero.setPosition(0, 0);
+        puertoMadero.setPosition(375, 715);
+        puertoMadero.setScale(1.6f);
         spritesPaises.put("Puerto Madero", puertoMadero);
 
         Sprite nunez = new Sprite(new Texture("nunez.png"));
-        nunez.setPosition(0, 0);
+        nunez.setPosition(130,760);
+        nunez.setScale(1.5f);
         spritesPaises.put("Nuñez", nunez);
-        */
+
         Sprite belgrano = new Sprite(new Texture("belgrano.png"));
         belgrano.setPosition(35, 570);
         belgrano.setScale(1.6f);
         spritesPaises.put("Belgrano", belgrano);
+
+        Sprite recoleta = new Sprite(new Texture("recoleta.png"));
+        recoleta.setPosition(45, 710);
+        recoleta.setScale(1.7f);
+        spritesPaises.put("Recoleta", recoleta);
     }
 
     public void actualizarColoresPaises() {
