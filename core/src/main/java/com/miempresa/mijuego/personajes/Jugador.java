@@ -119,6 +119,7 @@ public class Jugador {
         paisesDisponibles.add(new GonzalezCatan());
         paisesDisponibles.add(new Hidalgo());
         paisesDisponibles.add(new IsidroCasanova());
+        paisesDisponibles.add(new IngenieroBudge());
         paisesDisponibles.add(new JoseCPaz());
         paisesDisponibles.add(new La18());
         paisesDisponibles.add(new LaCatanga());
@@ -156,7 +157,7 @@ public class Jugador {
         Collections.shuffle(paisesDisponibles);
 
         ArrayList<Pais> paisesAsignados = new ArrayList<>(
-            paisesDisponibles.subList(0, Math.min(48, paisesDisponibles.size()))
+            paisesDisponibles.subList(0, Math.min(49, paisesDisponibles.size()))
         );
 
         jugador.asignarPaises(paisesAsignados);
