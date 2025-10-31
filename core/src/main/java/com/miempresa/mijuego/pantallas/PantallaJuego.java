@@ -3,26 +3,39 @@ package com.miempresa.mijuego.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.miempresa.mijuego.enums.FaseJuego;
 import com.miempresa.mijuego.objetivos.Objetivo;
 import com.miempresa.mijuego.paises.Pais;
 import com.miempresa.mijuego.personajes.Jugador;
 import com.miempresa.mijuego.personajes.Personaje;
+import com.miempresa.mijuego.juego.GameState;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 
 public class PantallaJuego implements Screen {
     private MiJuegoPrincipal juego;
     private Texture texturaJuego;
     private Texture texturaObjetivo;
     private Texture texturaPersonaje;
-    private Jugador jugadorActual;
+
+    // Jugadores (local por ahora; luego los reemplazás por red)
+    private Jugador jugadorActual; // quien entró a esta pantalla
+    private Jugador jugador1;
+    private Jugador jugador2;
+    private Jugador jugador3;
+
     private HashMap<String, Sprite> spritesPaises;
+    private GameState gameState;
 
     private Vector3 posicionToque;
     private Vector2 posicionMundo;
@@ -34,10 +47,28 @@ public class PantallaJuego implements Screen {
     private Rectangle botonObjetivo;
     private Rectangle botonDerecha;
     private Circle botonCirculo;
+    private Rectangle botonAtacar;
+    private Rectangle botonAgrupar;
+    private Rectangle areaContadorPaises;
 
-    // =====================================================
-    // CONSTRUCTOR
-    // =====================================================
+    // --- Estado de selección de ataque ---
+    private boolean modoAtaque = false;
+    private Pais paisSeleccionadoAtacante = null;
+
+    // --- Overlay de Victoria ---
+    private boolean victoriaActiva = false;
+    private Texture fondoVictoria = null;
+    private Jugador ganadorPartida = null;
+
+    // --- Estado de agrupación ---
+    private boolean modoAgrupar = false;
+    private Pais paisSeleccionadoOrigenAgrupar = null;
+
+    private static final boolean DEBUG_HITBOXES = true; // ponelo true para verlas
+    private com.badlogic.gdx.graphics.glutils.ShapeRenderer debugShapes;
+
+    private final BitmapFont font = new BitmapFont();
+
     public PantallaJuego(MiJuegoPrincipal juego) {
         this(juego, new Jugador("Jugador por defecto"));
     }
@@ -55,14 +86,21 @@ public class PantallaJuego implements Screen {
         cargarTexturaPersonaje();
         inicializarBotonesInterfaz();
         inicializarAreaObjetivo();
-        inicializarPartida();
+        inicializarPartida(); // crea jugadores locales y GameState
     }
 
     private void inicializarBotonesInterfaz() {
-        botonTimon = new Circle(119, 1008, 53);
+        botonTimon    = new Circle(119, 1008, 53);
+        botonAgrupar  = new Rectangle(502, 960, 260, 95);
         botonObjetivo = new Rectangle(855, 955, 210, 105);
-        botonDerecha = new Rectangle(1159, 962, 456, 93);
-        botonCirculo = new Circle(1810, 1008, 53);
+        botonAtacar   = new Rectangle(1159, 960, 300, 95);
+        areaContadorPaises = new Rectangle(1489, 950, 118, 85);
+
+        botonDerecha  = new Rectangle(1642, 960, 68, 95);
+
+        botonCirculo  = new Circle(1810, 1008, 53);
+
+        if (DEBUG_HITBOXES) debugShapes = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
     }
 
     private void inicializarAreaObjetivo() {
@@ -70,7 +108,6 @@ public class PantallaJuego implements Screen {
         float altoObjetivo = 400;
         float x = (MiJuegoPrincipal.ANCHO_VIRTUAL - anchoObjetivo) / 2;
         float y = (MiJuegoPrincipal.ALTO_VIRTUAL - altoObjetivo) / 2;
-
         areaObjetivo = new Rectangle(x, y, anchoObjetivo, altoObjetivo);
     }
 
@@ -78,7 +115,6 @@ public class PantallaJuego implements Screen {
         if (jugadorActual.tienePersonaje()) {
             String nombrePersonaje = jugadorActual.getPersonajeSeleccionado().getNombre();
             String archivoTextura = obtenerArchivoTexturaPersonaje(nombrePersonaje);
-
             try {
                 texturaPersonaje = new Texture(archivoTextura);
                 System.out.println("Cargada textura del personaje: " + archivoTextura);
@@ -91,30 +127,59 @@ public class PantallaJuego implements Screen {
         }
     }
 
+    private void prepararOverlayVictoria(Jugador ganador) {
+        if (ganador == null) return;
+
+        String archivoVictoria = "pantalla_victoria.png"; // fallback genérico
+        if (ganador.tienePersonaje()) {
+            String nom = ganador.getPersonajeSeleccionado().getNombre();
+            switch (nom) {
+                case "El Villero":         archivoVictoria = "victoria_villero.png"; break;
+                case "El Pibe Piola":      archivoVictoria = "victoria_pibe_piola.png"; break;
+                case "El Mentiroso Rey":   archivoVictoria = "victoria_mentiroso.png"; break;
+                case "El Marinero Papá":   archivoVictoria = "victoria_marinero.png"; break;
+                case "El Ratón del Grupo": archivoVictoria = "victoria_raton.png"; break;
+                // default ya queda en "pantalla_victoria.png"
+            }
+        }
+
+        if (fondoVictoria != null) {
+            fondoVictoria.dispose();
+        }
+        fondoVictoria = new Texture(archivoVictoria);
+        ganadorPartida = ganador;
+        victoriaActiva = true;
+    }
+
     private String obtenerArchivoTexturaPersonaje(String nombrePersonaje) {
         switch (nombrePersonaje) {
-            case "El Marinero Papá":
-                return "tropa_marinero.png";
-            case "El Pibe Piola":
-                return "tropa_pibe_piola.png";
-            case "El Villero":
-                return "tropa_villero.png";
-            case "El Mentiroso Rey":
-                return "tropa_mentiroso.png";
-            case "El Ratón del Grupo":
-                return "tropa_raton.png";
-            default:
-                return "tropa_marinero.png";
+            case "El Marinero Papá":   return "tropa_marinero.png";
+            case "El Pibe Piola":      return "tropa_pibe_piola.png";
+            case "El Villero":         return "tropa_villero.png";
+            case "El Mentiroso Rey":   return "tropa_mentiroso.png";
+            case "El Ratón del Grupo": return "tropa_raton.png";
+            default:                   return "tropa_marinero.png";
         }
     }
 
+    /** Inicializa la partida local (3 jugadores) y el GameState para la colocación inicial. */
     private void inicializarPartida() {
+        // Asegurá objetivo del jugador que entró
         if (!jugadorActual.tieneObjetivo()) {
             Jugador.asignarObjetivoAleatorio(jugadorActual);
         }
 
+        // Crea 3 jugadores locales
+        jugador1 = jugadorActual;
+        jugador2 = new Jugador("Jugador 2");
+        jugador3 = new Jugador("Jugador 3");
+        if (!jugador2.tieneObjetivo()) Jugador.asignarObjetivoAleatorio(jugador2);
+        if (!jugador3.tieneObjetivo()) Jugador.asignarObjetivoAleatorio(jugador3);
+
         System.out.println("=== INICIANDO PARTIDA ===");
-        System.out.println(jugadorActual.getInformacionJugador());
+        System.out.println(jugador1.getInformacionJugador());
+        System.out.println(jugador2.getInformacionJugador());
+        System.out.println(jugador3.getInformacionJugador());
         if (jugadorActual.tienePersonaje()) {
             System.out.println("Habilidad: " + jugadorActual.getPersonajeSeleccionado().getHabilidad());
         }
@@ -122,11 +187,18 @@ public class PantallaJuego implements Screen {
             System.out.println("Descripción del objetivo: " + jugadorActual.getObjetivoAsignado().getDescripcion());
         }
         System.out.println("========================");
+
+        // IMPORTANTE: asumimos que YA repartiste países y cada jugador tiene su lista de controlados
+        ArrayList<Jugador> jugadores = new ArrayList<>();
+        jugadores.add(jugador1);
+        jugadores.add(jugador2);
+        jugadores.add(jugador3);
+        gameState = new GameState(jugadores, 0); // empieza jugador1
     }
 
     private void inicializarSpritesPaises() {
         spritesPaises = new HashMap<>();
-
+        // ==== tal cual vos lo tenías ====
         Sprite bajoFlores = new Sprite(new Texture("bajoFlores.png"));
         bajoFlores.setPosition(960, 420);
         bajoFlores.setScale(1.5f);
@@ -371,6 +443,7 @@ public class PantallaJuego implements Screen {
         spritesPaises.put("Recoleta", recoleta);
     }
 
+    /** Colorea países controlados por el jugadorActual (como ya hacías). */
     public void actualizarColoresPaises() {
         if (spritesPaises == null || jugadorActual == null) return;
 
@@ -400,25 +473,69 @@ public class PantallaJuego implements Screen {
         }
     }
 
+    /** Devuelve nombre del país clickeado por bounding box, o null si no hay match. */
+    private String detectarPaisPorClick(float x, float y) {
+        for (Map.Entry<String, Sprite> e : spritesPaises.entrySet()) {
+            if (e.getValue().getBoundingRectangle().contains(x, y)) {
+                return e.getKey();
+            }
+        }
+        return null;
+    }
+
+    /** Busca el objeto Pais real por nombre recorriendo las listas de controlados. */
+    private Pais getPaisPorNombre(String nombre) {
+        for (Jugador j : new Jugador[]{jugador1, jugador2, jugador3}) {
+            if (j != null && j.getPaisesControlados() != null) {
+                for (Pais p : j.getPaisesControlados()) {
+                    if (p.getNombre().equalsIgnoreCase(nombre)) return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    /** ¿El país (nombre) pertenece a este jugador? */
+    private boolean paisPerteneceA(Jugador j, String nombrePais) {
+        if (j == null || j.getPaisesControlados() == null) return false;
+        for (Pais p : j.getPaisesControlados()) {
+            if (p.getNombre().equalsIgnoreCase(nombrePais)) return true;
+        }
+        return false;
+    }
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         juego.vistaVentana.apply();
         juego.loteSprites.setProjectionMatrix(juego.camara.combined);
-        manejarInput();
 
+        manejarInput();
         actualizarColoresPaises();
 
         juego.loteSprites.begin();
 
+        // Fondo UI
         juego.loteSprites.draw(texturaJuego, 0, 0,
             MiJuegoPrincipal.ANCHO_VIRTUAL,
             MiJuegoPrincipal.ALTO_VIRTUAL);
 
-        for (Sprite s : spritesPaises.values()) {
+        // Dibuja sprites de países + número de tropas real del modelo
+        for (Map.Entry<String, Sprite> e : spritesPaises.entrySet()) {
+            String nombre = e.getKey();
+            Sprite s = e.getValue();
             s.draw(juego.loteSprites);
+
+            Pais p = getPaisPorNombre(nombre);
+            if (p != null && p.getTropas() > 0) {
+                font.draw(juego.loteSprites,
+                    String.valueOf(p.getTropas()),
+                    s.getX() + s.getWidth() / 2f,
+                    s.getY() + s.getHeight() + 18f);
+            }
         }
 
+        // Ícono del personaje
         if (texturaPersonaje != null) {
             float xPersonaje = botonCirculo.x - botonCirculo.radius;
             float yPersonaje = botonCirculo.y - botonCirculo.radius;
@@ -426,13 +543,89 @@ public class PantallaJuego implements Screen {
             juego.loteSprites.draw(texturaPersonaje, xPersonaje, yPersonaje, diametro, diametro);
         }
 
+        // HUD (fase/turno/colocaciones)
+        if (gameState != null) {
+            font.draw(juego.loteSprites, "Fase: " + gameState.getFase(), 30, 1030);
+            font.draw(juego.loteSprites, "Turno: " + gameState.getJugadorActual().getNombre(), 30, 1000);
+            font.draw(juego.loteSprites, "Tropas por colocar: " + gameState.getColocacionesPendientesDelTurno(), 30, 970);
+        }
+
+        // Overlay objetivo
         if (mostrandoObjetivo) {
             juego.loteSprites.draw(texturaObjetivo,
                 areaObjetivo.x, areaObjetivo.y,
                 areaObjetivo.width, areaObjetivo.height);
         }
 
+        // Contador de países del jugador actual
+        int cantPaises = (jugadorActual != null && jugadorActual.getPaisesControlados() != null)
+            ? jugadorActual.getPaisesControlados().size() : 0;
+
+        float oldScaleX = font.getData().scaleX, oldScaleY = font.getData().scaleY;
+        font.getData().setScale(1.8f);  // subí el tamaño sólo para el número
+
+        GlyphLayout layoutNumero = new GlyphLayout(font, String.valueOf(cantPaises));
+        float numeroX = areaContadorPaises.x + (areaContadorPaises.width - layoutNumero.width) / 2f;
+        float numeroY = areaContadorPaises.y + (areaContadorPaises.height - layoutNumero.height) / 2f + layoutNumero.height;
+        font.draw(juego.loteSprites, layoutNumero, numeroX, numeroY);
+
+        font.getData().setScale(oldScaleX, oldScaleY);
+
         juego.loteSprites.end();
+
+        // Debug: mostrar hitboxes invisibles
+        if (DEBUG_HITBOXES) {
+            debugShapes.setProjectionMatrix(juego.camara.combined);
+            debugShapes.begin(com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line);
+            debugShapes.setColor(1, 0, 0, 1);
+            debugShapes.circle(botonTimon.x, botonTimon.y, botonTimon.radius);
+            debugShapes.rect(botonAgrupar.x,  botonAgrupar.y,  botonAgrupar.width,  botonAgrupar.height);
+            debugShapes.rect(botonObjetivo.x, botonObjetivo.y, botonObjetivo.width, botonObjetivo.height);
+            debugShapes.rect(botonAtacar.x,   botonAtacar.y,   botonAtacar.width,   botonAtacar.height);
+            debugShapes.rect(areaContadorPaises.x, areaContadorPaises.y, areaContadorPaises.width, areaContadorPaises.height);
+            debugShapes.rect(botonDerecha.x,  botonDerecha.y,  botonDerecha.width,  botonDerecha.height);
+            debugShapes.circle(botonCirculo.x, botonCirculo.y, botonCirculo.radius);
+            debugShapes.end();
+        }
+        // Activar overlay si hay ganador y aún no se mostró
+        if (!victoriaActiva && gameState != null && gameState.hayGanador()) {
+            Jugador ganador = gameState.getGanador();
+            System.out.println("🏆 Fin de la partida: " + ganador.getNombre() + " cumplió su objetivo.");
+            prepararOverlayVictoria(ganador);
+        }
+
+// Si está activa la victoria, dibujar overlay y capturar input mínimo
+        if (victoriaActiva) {
+            juego.loteSprites.begin();
+            // Dibuja el sprite a pantalla completa
+            juego.loteSprites.draw(
+                fondoVictoria,
+                0, 0,
+                MiJuegoPrincipal.ANCHO_VIRTUAL,
+                MiJuegoPrincipal.ALTO_VIRTUAL
+            );
+
+            // (Opcional) leyenda sobre el arte
+            if (ganadorPartida != null) {
+                String msg = "¡" + ganadorPartida.getNombre().toUpperCase() + " GANA!";
+                float oldX = font.getData().scaleX, oldY = font.getData().scaleY;
+                font.getData().setScale(2f);
+                GlyphLayout lay = new GlyphLayout(font, msg);
+                float x = (MiJuegoPrincipal.ANCHO_VIRTUAL - lay.width) / 2f;
+                float y = 160; // ajustá según tu imagen
+                font.draw(juego.loteSprites, lay, x, y);
+                font.getData().setScale(oldX, oldY);
+            }
+
+            juego.loteSprites.end();
+
+            // Salir al menú con toque o ENTER
+            if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ENTER)) {
+                if (fondoVictoria != null) { fondoVictoria.dispose(); fondoVictoria = null; }
+                juego.setScreen(new MenuPrincipal(juego));
+            }
+            return; // importantísimo: no dibujar nada más debajo del overlay
+        }
     }
 
     private void manejarInput() {
@@ -445,6 +638,7 @@ public class PantallaJuego implements Screen {
             juego.vistaVentana.unproject(posicionToque);
             posicionMundo.set(posicionToque.x, posicionToque.y);
             System.out.println("Click en posición: X=" + posicionMundo.x + ", Y=" + posicionMundo.y);
+
             if (mostrandoObjetivo) {
                 if (!areaObjetivo.contains(posicionMundo.x, posicionMundo.y)) {
                     mostrandoObjetivo = false;
@@ -453,14 +647,142 @@ public class PantallaJuego implements Screen {
                 return;
             }
 
-            if (botonTimon.contains(posicionMundo.x, posicionMundo.y)) {
-                alPresionarTimon();
-            } else if (botonObjetivo.contains(posicionMundo.x, posicionMundo.y)) {
-                alPresionarObjetivo();
-            } else if (botonDerecha.contains(posicionMundo.x, posicionMundo.y)) {
-                alPresionarBotonDerecha();
-            } else if (botonCirculo.contains(posicionMundo.x, posicionMundo.y)) {
-                alPresionarCirculo();
+            // Botones
+            if (botonTimon.contains(posicionMundo.x, posicionMundo.y)) { alPresionarTimon(); return; }
+            if (botonObjetivo.contains(posicionMundo.x, posicionMundo.y)) { alPresionarObjetivo(); return; }
+            if (botonDerecha.contains(posicionMundo.x, posicionMundo.y)) { alPresionarBotonDerecha(); return; }
+            if (botonCirculo.contains(posicionMundo.x, posicionMundo.y)) { alPresionarCirculo(); return; }
+            if (botonAgrupar.contains(posicionMundo.x, posicionMundo.y)) { alPresionarAgrupar(); return; }
+            if (botonAtacar.contains(posicionMundo.x, posicionMundo.y)) { alPresionarAtacar(); return; }
+
+            // Click en mapa (un solo nombrePais detectado acá)
+            String nombrePaisClick = detectarPaisPorClick(posicionMundo.x, posicionMundo.y);
+            if (nombrePaisClick != null && gameState != null) {
+                switch (gameState.getFase()) {
+                    case COLOCACION_INICIAL: {
+                        Jugador delTurno = gameState.getJugadorActual();
+                        if (!paisPerteneceA(delTurno, nombrePaisClick)) {
+                            System.out.println("No podés colocar en " + nombrePaisClick + ": no te pertenece.");
+                            return;
+                        }
+                        if (gameState.getColocacionesPendientesDelTurno() <= 0) {
+                            System.out.println("Ya colocaste tus 8 tropas iniciales.");
+                            return;
+                        }
+                        Pais pais = getPaisPorNombre(nombrePaisClick);
+                        if (pais == null) {
+                            System.out.println("No se encontró el país " + nombrePaisClick + " en el modelo.");
+                            return;
+                        }
+                        boolean ok = gameState.colocarTropaInicial(pais);
+                        if (ok) {
+                            System.out.println("Colocaste 1 tropa en " + nombrePaisClick +
+                                ". Restantes: " + gameState.getColocacionesPendientesDelTurno());
+                        } else {
+                            System.out.println("No se pudo colocar tropa (fase/propietario/contador).");
+                        }
+                        break;
+                    }
+                    case ATAQUE: {
+                        Pais paisSeleccionado = getPaisPorNombre(nombrePaisClick);
+                        if (paisSeleccionado == null) return;
+
+                        Jugador actual = gameState.getJugadorActual();
+
+                        // ==================== MODO ATAQUE ====================
+                        if (modoAtaque) {
+                            // Primer click → seleccionar país atacante
+                            if (paisSeleccionadoAtacante == null) {
+                                if (paisSeleccionado.getPropietario() != actual) {
+                                    System.out.println("⚠️ Ese país no te pertenece.");
+                                    return;
+                                }
+                                if (paisSeleccionado.getTropas() <= 1) {
+                                    System.out.println("⚠️ Necesitás al menos 2 tropas para atacar.");
+                                    return;
+                                }
+
+                                paisSeleccionadoAtacante = paisSeleccionado;
+                                System.out.println("✅ Seleccionaste " + paisSeleccionadoAtacante.getNombre() + " como atacante. Ahora toca un país enemigo limítrofe para atacar.");
+                                return;
+                            }
+
+                            // Segundo click → país defensor
+                            if (paisSeleccionado == paisSeleccionadoAtacante) {
+                                System.out.println("⚠️ No podés atacar el mismo país.");
+                                return;
+                            }
+
+                            if (paisSeleccionado.getPropietario() == actual) {
+                                System.out.println("⚠️ Ese país también es tuyo. Elegí uno enemigo limítrofe.");
+                                return;
+                            }
+
+                            if (!paisSeleccionadoAtacante.puedeAtacarA(paisSeleccionado)) {
+                                System.out.println("⚠️ No podés atacar ese país: no es limítrofe.");
+                                return;
+                            }
+
+                            // Ejecutar batalla
+                            String resultado = gameState.atacar(paisSeleccionadoAtacante, paisSeleccionado);
+                            System.out.println(resultado);
+
+                            actualizarColoresPaises();
+
+                            modoAtaque = false;
+                            paisSeleccionadoAtacante = null;
+                            System.out.println("🏁 Fin del ataque. Podés volver a atacar, agrupar o pasar turno.");
+                            return;
+                        }
+
+                        // ==================== MODO AGRUPAR ====================
+                        if (modoAgrupar) {
+                            // Primer click → país origen
+                            if (paisSeleccionadoOrigenAgrupar == null) {
+                                if (paisSeleccionado.getPropietario() != actual) {
+                                    System.out.println("⚠️ Solo podés mover tropas desde tus propios países.");
+                                    return;
+                                }
+                                if (paisSeleccionado.getTropas() <= 1) {
+                                    System.out.println("⚠️ " + paisSeleccionado.getNombre() + " necesita al menos 2 tropas para ceder una.");
+                                    return;
+                                }
+                                paisSeleccionadoOrigenAgrupar = paisSeleccionado;
+                                System.out.println("✅ Seleccionaste " + paisSeleccionado.getNombre() + " como origen. Ahora elegí un país tuyo limítrofe para recibir tropas.");
+                                return;
+                            }
+
+                            // Segundo click → país destino
+                            if (paisSeleccionado == paisSeleccionadoOrigenAgrupar) {
+                                System.out.println("⚠️ No podés mover tropas al mismo país.");
+                                return;
+                            }
+
+                            if (paisSeleccionado.getPropietario() != actual) {
+                                System.out.println("⚠️ Solo podés mover tropas entre tus propios países.");
+                                return;
+                            }
+
+                            if (!paisSeleccionadoOrigenAgrupar.puedeAtacarA(paisSeleccionado)) {
+                                System.out.println("⚠️ Esos países no son limítrofes, no podés mover tropas entre ellos.");
+                                return;
+                            }
+
+                            // Movimiento válido
+                            paisSeleccionadoOrigenAgrupar.agregarTropas(-1);
+                            paisSeleccionado.agregarTropas(1);
+                            System.out.println("➡️ Moviste 1 tropa de " + paisSeleccionadoOrigenAgrupar.getNombre() + " a " + paisSeleccionado.getNombre() + ".");
+
+                            paisSeleccionadoOrigenAgrupar = null;
+                            actualizarColoresPaises();
+                            return;
+                        }
+
+                        // Si no está en modo ataque ni en modo agrupar
+                        System.out.println("💬 Estás en fase de ATAQUE. Toca 'Atacar' o 'Agrupar' para actuar.");
+                        break;
+                    }
+                }
             }
         }
     }
@@ -471,7 +793,7 @@ public class PantallaJuego implements Screen {
 
     private void alPresionarObjetivo() {
         mostrandoObjetivo = true;
-        if (jugadorActual.tieneObjetivo()) {
+        if (jugadorActual.tieneObjetivo()) {   // <-- antes decía tienePersonaje()
             Objetivo objetivo = jugadorActual.getObjetivoAsignado();
             System.out.println("Objetivo: " + objetivo.getNombre());
             System.out.println("Descripción: " + objetivo.getDescripcion());
@@ -479,7 +801,42 @@ public class PantallaJuego implements Screen {
     }
 
     private void alPresionarBotonDerecha() {
-        System.out.println("Botón derecha presionado...");
+        FaseJuego fase = gameState.getFase();
+
+        switch (fase) {
+            case COLOCACION_INICIAL:
+                System.out.println("⚙️ Aún estás en colocación inicial.");
+                break;
+
+            case ATAQUE:
+                if (modoAgrupar) {
+                    // Salir del modo agrupar y pasar turno
+                    modoAgrupar = false;
+                    paisSeleccionadoOrigenAgrupar = null;
+                    gameState.finalizarTurnoDeAtaque();
+                    System.out.println("✅ Terminaste de agrupar. Turno del siguiente jugador: " + gameState.getJugadorActual().getNombre());
+                    break;
+                }
+
+                // Fin del ataque normal
+                gameState.finalizarTurnoDeAtaque();
+                System.out.println("✅ Turno de ataque finalizado. Ahora juega: " + gameState.getJugadorActual().getNombre());
+                break;
+
+            case AGRUPAR:
+                int restantes = gameState.getRefuerzosPendientesDelTurno();
+                if (restantes > 0) {
+                    System.out.println("⚠️ Todavía te quedan " + restantes + " refuerzos por colocar.");
+                    return;
+                }
+                gameState.cerrarAgrupacionYPasarTurno();
+                System.out.println("✅ Turno de agrupación finalizado. Turno de: " + gameState.getJugadorActual().getNombre());
+                break;
+
+            default:
+                System.out.println("⚙️ No hay acciones disponibles para esta fase.");
+                break;
+        }
     }
 
     private void alPresionarCirculo() {
@@ -487,6 +844,32 @@ public class PantallaJuego implements Screen {
             Personaje personaje = jugadorActual.getPersonajeSeleccionado();
             System.out.println("Personaje: " + personaje.getNombre());
         }
+    }
+
+    private void alPresionarAgrupar() {
+        if (gameState.getFase() != FaseJuego.ATAQUE) {
+            System.out.println("⚠️ Solo se puede agrupar durante la fase de ATAQUE.");
+            return;
+        }
+
+        modoAgrupar = true;
+        modoAtaque = false; // desactivamos el modo ataque si estaba activo
+        paisSeleccionadoOrigenAgrupar = null;
+        System.out.println("🔄 MODO AGRUPAR ACTIVADO: toca un país tuyo (con más de 1 tropa) para mover tropas.");
+    }
+
+    private void alPresionarAtacar() {
+        if (gameState.getFase() != com.miempresa.mijuego.enums.FaseJuego.ATAQUE) {
+            System.out.println("⚠️ No podés atacar fuera de la fase de ATAQUE.");
+            return;
+        }
+        modoAtaque = true;
+        paisSeleccionadoAtacante = null;
+        System.out.println("🎯 MODO ATAQUE ACTIVADO: toca un país propio (con más de 1 tropa) para comenzar.");
+    }
+
+    private void alPresionarPaises()  {
+        System.out.println("PAISES presionado");
     }
 
     @Override
@@ -513,7 +896,10 @@ public class PantallaJuego implements Screen {
         texturaJuego.dispose();
         texturaObjetivo.dispose();
         if (texturaPersonaje != null) texturaPersonaje.dispose();
+        if (fondoVictoria != null) fondoVictoria.dispose(); // <--- importante
         for (Sprite s : spritesPaises.values()) s.getTexture().dispose();
+        font.dispose();
+        if (debugShapes != null) debugShapes.dispose();
     }
 
     public Jugador getJugadorActual() {

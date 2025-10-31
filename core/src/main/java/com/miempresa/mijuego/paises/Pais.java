@@ -10,11 +10,15 @@ public abstract class Pais {
     private ArrayList<String> nombresLimitrofes;
     private Jugador propietario;
 
+    // NUEVO: estado mínimo para jugar
+    private int tropas = 0;
+
     public Pais(String nombre, String continente, ArrayList<String> nombresLimitrofes) {
         this.nombre = nombre;
         this.continente = continente;
         this.nombresLimitrofes = (nombresLimitrofes != null) ? nombresLimitrofes : new ArrayList<>();
         this.propietario = null;
+        this.tropas = 0; // empiezan sin tropas colocadas (se agregan en la fase de colocación)
     }
 
     public String getNombre() {
@@ -37,9 +41,34 @@ public abstract class Pais {
         this.propietario = propietario;
     }
 
+    // ====== NUEVO: TROPAS ======
+    public int getTropas() {
+        return tropas;
+    }
+
+    public void setTropas(int n) {
+        this.tropas = Math.min(4, Math.max(0, n));
+    }
+
+    /** Suma o resta tropas (sin bajar de 0 y con tope 4). */
+    public void agregarTropas(int n) {
+        this.tropas = Math.min(4, Math.max(0, this.tropas + n));
+    }
+
+    /** Conveniencia: ¿puedo atacar a "otro"? (regla mínima: limítrofe y al menos 2 tropas) */
+    public boolean puedeAtacarA(Pais otro) {
+        if (otro == null) return false;
+        if (this.tropas <= 1) return false;
+        // chequeo de limítrofe por nombre, ignorando mayúsculas
+        for (String lim : nombresLimitrofes) {
+            if (lim.equalsIgnoreCase(otro.getNombre())) return true;
+        }
+        return false;
+    }
 
     @Override
     public String toString() {
-        return nombre + (propietario != null ? " (" + propietario.getNombre() + ")" : " (Sin dueño)");
+        String dueño = (propietario != null ? propietario.getNombre() : "Sin dueño");
+        return nombre + " — " + dueño + " — tropas: " + tropas;
     }
 }
