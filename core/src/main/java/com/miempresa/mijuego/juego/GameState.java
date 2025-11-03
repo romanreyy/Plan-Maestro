@@ -22,7 +22,6 @@ public class GameState {
 
     private final Map<Jugador, Integer> refuerzosPendientes = new HashMap<>();
 
-    // 🏆 NUEVO: control de victoria
     private Jugador ganador = null;
 
     public GameState(List<Jugador> jugadores, int indiceQueEmpieza) {

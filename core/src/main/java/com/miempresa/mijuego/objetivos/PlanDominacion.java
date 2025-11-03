@@ -1,4 +1,3 @@
-// com.miempresa.mijuego.objetivos.PlanDominacion
 package com.miempresa.mijuego.objetivos;
 
 import com.miempresa.mijuego.juego.GameState;

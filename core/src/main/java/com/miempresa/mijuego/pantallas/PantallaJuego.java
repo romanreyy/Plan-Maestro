@@ -28,7 +28,6 @@ public class PantallaJuego implements Screen {
     private Texture texturaObjetivo;
     private Texture texturaPersonaje;
 
-    // Jugadores (local por ahora; luego los reemplazás por red)
     private Jugador jugadorActual; // quien entró a esta pantalla
     private Jugador jugador1;
     private Jugador jugador2;
@@ -51,16 +50,13 @@ public class PantallaJuego implements Screen {
     private Rectangle botonAgrupar;
     private Rectangle areaContadorPaises;
 
-    // --- Estado de selección de ataque ---
     private boolean modoAtaque = false;
     private Pais paisSeleccionadoAtacante = null;
 
-    // --- Overlay de Victoria ---
     private boolean victoriaActiva = false;
     private Texture fondoVictoria = null;
     private Jugador ganadorPartida = null;
 
-    // --- Estado de agrupación ---
     private boolean modoAgrupar = false;
     private Pais paisSeleccionadoOrigenAgrupar = null;
 
@@ -130,7 +126,7 @@ public class PantallaJuego implements Screen {
     private void prepararOverlayVictoria(Jugador ganador) {
         if (ganador == null) return;
 
-        String archivoVictoria = "pantalla_victoria.png"; // fallback genérico
+        String archivoVictoria = "pantalla_victoria.png";
         if (ganador.tienePersonaje()) {
             String nom = ganador.getPersonajeSeleccionado().getNombre();
             switch (nom) {
@@ -139,7 +135,6 @@ public class PantallaJuego implements Screen {
                 case "El Mentiroso Rey":   archivoVictoria = "victoria_mentiroso.png"; break;
                 case "El Marinero Papá":   archivoVictoria = "victoria_marinero.png"; break;
                 case "El Ratón del Grupo": archivoVictoria = "victoria_raton.png"; break;
-                // default ya queda en "pantalla_victoria.png"
             }
         }
 
@@ -162,14 +157,11 @@ public class PantallaJuego implements Screen {
         }
     }
 
-    /** Inicializa la partida local (3 jugadores) y el GameState para la colocación inicial. */
     private void inicializarPartida() {
-        // Asegurá objetivo del jugador que entró
         if (!jugadorActual.tieneObjetivo()) {
             Jugador.asignarObjetivoAleatorio(jugadorActual);
         }
 
-        // Crea 3 jugadores locales
         jugador1 = jugadorActual;
         jugador2 = new Jugador("Jugador 2");
         jugador3 = new Jugador("Jugador 3");
@@ -188,7 +180,6 @@ public class PantallaJuego implements Screen {
         }
         System.out.println("========================");
 
-        // IMPORTANTE: asumimos que YA repartiste países y cada jugador tiene su lista de controlados
         ArrayList<Jugador> jugadores = new ArrayList<>();
         jugadores.add(jugador1);
         jugadores.add(jugador2);
@@ -198,7 +189,6 @@ public class PantallaJuego implements Screen {
 
     private void inicializarSpritesPaises() {
         spritesPaises = new HashMap<>();
-        // ==== tal cual vos lo tenías ====
         Sprite bajoFlores = new Sprite(new Texture("bajoFlores.png"));
         bajoFlores.setPosition(960, 420);
         bajoFlores.setScale(1.5f);
@@ -443,7 +433,6 @@ public class PantallaJuego implements Screen {
         spritesPaises.put("Recoleta", recoleta);
     }
 
-    /** Colorea países controlados por el jugadorActual (como ya hacías). */
     public void actualizarColoresPaises() {
         if (spritesPaises == null || jugadorActual == null) return;
 
@@ -473,7 +462,6 @@ public class PantallaJuego implements Screen {
         }
     }
 
-    /** Devuelve nombre del país clickeado por bounding box, o null si no hay match. */
     private String detectarPaisPorClick(float x, float y) {
         for (Map.Entry<String, Sprite> e : spritesPaises.entrySet()) {
             if (e.getValue().getBoundingRectangle().contains(x, y)) {
@@ -483,7 +471,6 @@ public class PantallaJuego implements Screen {
         return null;
     }
 
-    /** Busca el objeto Pais real por nombre recorriendo las listas de controlados. */
     private Pais getPaisPorNombre(String nombre) {
         for (Jugador j : new Jugador[]{jugador1, jugador2, jugador3}) {
             if (j != null && j.getPaisesControlados() != null) {

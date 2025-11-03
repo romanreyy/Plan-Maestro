@@ -1,7 +1,6 @@
-// com.miempresa.mijuego.enums.FaseJuego
 package com.miempresa.mijuego.enums;
 
-public enum class FaseJuego {
+public enum FaseJuego {
     COLOCACION_INICIAL,
     ATAQUE,
     AGRUPAR,

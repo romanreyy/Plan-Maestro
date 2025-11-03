@@ -94,7 +94,12 @@ public class Jugador {
 
     public static void asignarObjetivoAleatorio(Jugador jugador) {
         Objetivo[] objetivosDisponibles = {
-            new PlanDominacion()
+            new PlanDominacion(),
+            new ControlTotalTerritorioRico(),
+            new DominacionPobre(),
+            new EquilibrioEstrategico(),
+            new ExpansionMixta(),
+            new RicoPobre()
         };
         Random random = new Random();
         Objetivo objetivoAleatorio = objetivosDisponibles[random.nextInt(objetivosDisponibles.length)];
