@@ -25,61 +25,58 @@ public class Batalla {
         this.jugadorAtacante = atacante.getPropietario();
         this.jugadorDefensor = defensor.getPropietario();
 
-        // 🔹 Validación de ataque, considerando habilidades especiales
         if (!validarAtaquePermitido()) {
             throw new IllegalArgumentException("No se puede atacar: países no son limítrofes o no hay tropas suficientes.");
         }
     }
 
-    /**
-     * Verifica si el ataque es válido, considerando habilidades activas.
-     */
     private boolean validarAtaquePermitido() {
-        // Si tiene tropas insuficientes, no puede atacar
         if (atacante.getTropas() <= 1) return false;
-
-        // Caso normal: países limítrofes
         if (atacante.puedeAtacarA(defensor)) return true;
 
-        // 🌊 Marinero Papá: puede atacar sin adyacencia cada 5 rondas
+        // 🌊 Marinero Papá
         if (jugadorAtacante.tienePersonaje() &&
             "El Marinero Papá".equals(jugadorAtacante.getPersonajeSeleccionado().getNombre()) &&
             jugadorAtacante.habilidadLista(state.getNumeroRonda())) {
 
             System.out.println("🌊 " + jugadorAtacante.getNombre() +
-                " usa 'Navegación Experta' para atacar a " +
-                defensor.getNombre() + " sin ser limítrofe!");
-
+                " usa 'Navegación Experta' para atacar " + defensor.getNombre() + " sin ser limítrofe!");
             jugadorAtacante.consumirHabilidad(state.getNumeroRonda());
             return true;
         }
 
-        // Si no cumple ninguna condición
         return false;
     }
 
-    /**
-     * Ejecuta la batalla completa y devuelve el resultado final como texto.
-     */
     public String ejecutarBatalla() {
 
-        // 💥 Pibe Piola: conquista directa sin tirar dados
+        // 💥 Pibe Piola
         if (jugadorAtacante.tienePersonaje() &&
             "El Pibe Piola".equals(jugadorAtacante.getPersonajeSeleccionado().getNombre()) &&
             jugadorAtacante.habilidadLista(state.getNumeroRonda())) {
 
             jugadorAtacante.consumirHabilidad(state.getNumeroRonda());
-
             defensor.setPropietario(jugadorAtacante);
             defensor.setTropas(1);
             atacante.agregarTropas(-1);
-
             jugadorDefensor.getPaisesControlados().remove(defensor);
             jugadorAtacante.getPaisesControlados().add(defensor);
 
             return "💥 " + jugadorAtacante.getNombre() +
                 " usa 'Golpe Maestro' y conquista directamente " +
                 defensor.getNombre() + " sin pelear!";
+        }
+
+        // ⚙️ Ratón del Grupo
+        if (jugadorAtacante.tienePersonaje() &&
+            "El Ratón del Grupo".equals(jugadorAtacante.getPersonajeSeleccionado().getNombre()) &&
+            jugadorAtacante.habilidadLista(state.getNumeroRonda())) {
+
+            System.out.println("🧀 " + jugadorAtacante.getNombre() +
+                " activa 'Ahorro Forzoso': " +
+                defensor.getNombre() + " solo podrá defender con 1 tropa.");
+            defensor.setTropas(1);
+            jugadorAtacante.consumirHabilidad(state.getNumeroRonda());
         }
 
         // ⚔️ Batalla normal
@@ -93,12 +90,52 @@ public class Batalla {
         List<Integer> tiradasAtacante = tirarDados(dadosAtacante);
         List<Integer> tiradasDefensor = tirarDados(dadosDefensor);
 
+        // 🃏 Mentiroso Rey
+        if (jugadorAtacante.tienePersonaje() &&
+            "El Mentiroso Rey".equals(jugadorAtacante.getPersonajeSeleccionado().getNombre()) &&
+            jugadorAtacante.habilidadLista(state.getNumeroRonda()) &&
+            !tiradasAtacante.isEmpty()) {
+
+            int idxMin = 0;
+            int minVal = tiradasAtacante.get(0);
+            for (int i = 1; i < tiradasAtacante.size(); i++) {
+                if (tiradasAtacante.get(i) < minVal) {
+                    minVal = tiradasAtacante.get(i);
+                    idxMin = i;
+                }
+            }
+            tiradasAtacante.set(idxMin, 6);
+            jugadorAtacante.consumirHabilidad(state.getNumeroRonda());
+            System.out.println("🃏 " + jugadorAtacante.getNombre() +
+                " usa 'Mentira Perfecta': su dado más bajo pasa a 6.");
+        }
+
+        // 💰 Villero: Robo Estratégico
+        if (jugadorAtacante.tienePersonaje() &&
+            "El Villero".equals(jugadorAtacante.getPersonajeSeleccionado().getNombre()) &&
+            jugadorAtacante.habilidadLista(state.getNumeroRonda()) &&
+            !tiradasAtacante.isEmpty() && !tiradasDefensor.isEmpty()) {
+
+            int maxDef = Collections.max(tiradasDefensor);
+            int minAtq = Collections.min(tiradasAtacante);
+
+            tiradasAtacante.set(tiradasAtacante.indexOf(minAtq), maxDef);
+            tiradasDefensor.set(tiradasDefensor.indexOf(maxDef), minAtq);
+
+            jugadorAtacante.consumirHabilidad(state.getNumeroRonda());
+
+            System.out.println("💰 " + jugadorAtacante.getNombre() +
+                " usa 'Robo Estratégico': roba el dado " + maxDef +
+                " del defensor y le da su dado " + minAtq + ".");
+        }
+
+        // Ordenamos después de habilidades
         tiradasAtacante.sort(Collections.reverseOrder());
         tiradasDefensor.sort(Collections.reverseOrder());
 
         System.out.println("🎯 " + jugadorAtacante.getNombre() + " ataca desde " +
             atacante.getNombre() + " (" + atacante.getTropas() + " tropas)");
-        System.out.println("🛡️  " + jugadorDefensor.getNombre() + " defiende en " +
+        System.out.println("🛡️ " + jugadorDefensor.getNombre() + " defiende en " +
             defensor.getNombre() + " (" + defensor.getTropas() + " tropas)");
         System.out.println("Dados atacante: " + tiradasAtacante);
         System.out.println("Dados defensor: " + tiradasDefensor);
@@ -110,11 +147,8 @@ public class Batalla {
         for (int i = 0; i < comparaciones; i++) {
             int a = tiradasAtacante.get(i);
             int d = tiradasDefensor.get(i);
-            if (a > d) {
-                bajasDefensor++;
-            } else {
-                bajasAtacante++;
-            }
+            if (a > d) bajasDefensor++;
+            else bajasAtacante++;
         }
 
         atacante.agregarTropas(-bajasAtacante);
@@ -127,15 +161,12 @@ public class Batalla {
         resultado.append(" - ").append(jugadorDefensor.getNombre())
             .append(" perdió ").append(bajasDefensor).append(" tropas.\n");
 
-        // 🏴‍☠️ Si el defensor perdió todas las tropas → conquista
         if (defensor.getTropas() <= 0) {
             defensor.setPropietario(jugadorAtacante);
-            defensor.setTropas(1); // una tropa se mueve
+            defensor.setTropas(1);
             atacante.agregarTropas(-1);
-
             jugadorDefensor.getPaisesControlados().remove(defensor);
             jugadorAtacante.getPaisesControlados().add(defensor);
-
             resultado.append("🏴‍☠️ ").append(jugadorAtacante.getNombre())
                 .append(" conquistó ").append(defensor.getNombre()).append("!\n");
         }
@@ -143,12 +174,10 @@ public class Batalla {
         return resultado.toString();
     }
 
-    /** Simula la tirada de N dados (1–6). */
     private List<Integer> tirarDados(int cantidad) {
         List<Integer> resultados = new ArrayList<>();
-        for (int i = 0; i < cantidad; i++) {
+        for (int i = 0; i < cantidad; i++)
             resultados.add(random.nextInt(6) + 1);
-        }
         return resultados;
     }
 }
