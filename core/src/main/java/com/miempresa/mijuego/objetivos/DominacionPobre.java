@@ -13,5 +13,9 @@ public class DominacionPobre extends Objetivo{
 
     @Override
     public boolean estaCumplido(Jugador jugador, GameState state) {
+        if (jugador == null || state == null) return false;
+
+        int paisesPobres = state.paisesDelJugadorEnContinente(jugador, "Pobre");
+        return paisesPobres >= 30;
     }
 }

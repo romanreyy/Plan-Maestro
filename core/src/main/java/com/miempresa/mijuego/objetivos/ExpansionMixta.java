@@ -13,5 +13,13 @@ public class ExpansionMixta extends Objetivo{
 
     @Override
     public boolean estaCumplido(Jugador jugador, GameState state) {
+        if (jugador == null || state == null) return false;
+
+        int total = (jugador.getPaisesControlados() != null)
+            ? jugador.getPaisesControlados().size() : 0;
+
+        int ricos = state.paisesDelJugadorEnContinente(jugador, "Rico");
+
+        return (total >= 25 && ricos >= 3);
     }
 }

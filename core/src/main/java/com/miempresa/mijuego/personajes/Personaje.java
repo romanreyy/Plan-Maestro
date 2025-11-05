@@ -1,40 +1,25 @@
+// com.miempresa.mijuego.personajes.Personaje
 package com.miempresa.mijuego.personajes;
 
 import com.badlogic.gdx.graphics.Color;
 
 public abstract class Personaje {
-    private String nombre;
-    private String descripcion;
-    private String habilidad;
-    private Color color; // 🔹 nuevo atributo
+    private final String nombre;
+    private final String lore;
+    private final String habilidadDescripcion;
+    private final Color color;
+    private final int cooldownRondas; // 🔹 cada cuántas rondas se habilita la habilidad
 
-    public Personaje(String nombre, String descripcion, String habilidad, Color color) {
+    protected Personaje(String nombre, String lore, String habilidadDescripcion, Color color, int cooldownRondas) {
         this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.habilidad = habilidad;
+        this.lore = lore;
+        this.habilidadDescripcion = habilidadDescripcion;
         this.color = color;
+        this.cooldownRondas = cooldownRondas;
     }
 
-    // Getters
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public String getHabilidad() {
-        return habilidad;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public String getInformacionCompleta() {
-        return "Nombre: " + nombre + "\n" +
-            "Descripción: " + descripcion + "\n" +
-            "Habilidad: " + habilidad;
-    }
+    public String getNombre() { return nombre; }
+    public String getHabilidad() { return habilidadDescripcion; }
+    public Color getColor() { return color; }
+    public int getCooldownRondas() { return cooldownRondas; }
 }

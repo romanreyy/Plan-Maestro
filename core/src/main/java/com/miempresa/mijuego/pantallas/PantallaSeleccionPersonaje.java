@@ -68,7 +68,6 @@ public class PantallaSeleccionPersonaje implements Screen {
     public void show() {
         System.out.println("Selecciona tu personaje para Plan Maestro");
         personajeSeleccionado = 0;
-        mostrarInformacionPersonaje();
     }
 
     private float tiempoLuz = 0;
@@ -130,7 +129,6 @@ public class PantallaSeleccionPersonaje implements Screen {
     private void seleccionarPersonaje(int indice) {
         if (indice >= 0 && indice < personajesDisponibles.length) {
             personajeSeleccionado = indice;
-            mostrarInformacionPersonaje();
             reproducirMusicaPorPersonaje(indice);
         }
     }
@@ -165,15 +163,6 @@ public class PantallaSeleccionPersonaje implements Screen {
         musicaPersonajeActual.setLooping(true);
         musicaPersonajeActual.setVolume(0.5f);
         musicaPersonajeActual.play();
-    }
-
-    private void mostrarInformacionPersonaje() {
-        Personaje personaje = personajesDisponibles[personajeSeleccionado];
-        System.out.println("=== PERSONAJE SELECCIONADO ===");
-        System.out.println("Nombre: " + personaje.getNombre());
-        System.out.println("Descripción: " + personaje.getDescripcion());
-        System.out.println("Habilidad: " + personaje.getHabilidad());
-        System.out.println("===============================");
     }
 
     private void confirmarSeleccion() {

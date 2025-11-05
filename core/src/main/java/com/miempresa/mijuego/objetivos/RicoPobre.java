@@ -13,5 +13,11 @@ public class RicoPobre extends Objetivo{
 
     @Override
     public boolean estaCumplido(Jugador jugador, GameState state) {
+        if (jugador == null || state == null) return false;
+
+        int ricos = state.paisesDelJugadorEnContinente(jugador, "Rico");
+        int pobres = state.paisesDelJugadorEnContinente(jugador, "Pobre");
+
+        return (ricos >= 7 && pobres >= 15);
     }
 }

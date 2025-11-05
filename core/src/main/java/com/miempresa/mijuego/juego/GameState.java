@@ -13,6 +13,9 @@ public class GameState {
     private int turno;
     private FaseJuego fase = FaseJuego.COLOCACION_INICIAL;
 
+    // 🔁 Rondas
+    private int numeroRonda = 1;
+
     private static final int TROPAS_INICIALES_POR_JUGADOR = 8;
     private int colocacionesPendientesDelTurno = TROPAS_INICIALES_POR_JUGADOR;
     private int jugadoresQueYaColocaron = 0;
@@ -28,12 +31,14 @@ public class GameState {
         if (jugadores == null || jugadores.size() != 3) {
             throw new IllegalArgumentException("Se requieren exactamente 3 jugadores.");
         }
-        for (Jugador j : jugadores)
-            Objects.requireNonNull(j, "Jugador nulo en la lista de jugadores");
+        for (Jugador j : jugadores) Objects.requireNonNull(j, "Jugador nulo en la lista de jugadores");
 
         this.jugadores = jugadores;
         this.turno = Math.floorMod(indiceQueEmpieza, jugadores.size());
         for (Jugador j : jugadores) refuerzosPendientes.put(j, 0);
+
+        // ⏱️ Inicializa la primera disponibilidad de habilidades según la ronda actual
+        inicializarCooldownHabilidadesParaTodos();
     }
 
     // --- Getters ---
@@ -46,6 +51,8 @@ public class GameState {
     public int getRefuerzosPendientesDelTurno() { return refuerzosPendientes.getOrDefault(getJugadorActual(), 0); }
     public Jugador getGanador() { return ganador; }
     public boolean hayGanador() { return ganador != null; }
+    public List<Jugador> getJugadores() { return jugadores; }
+    public int getNumeroRonda() { return numeroRonda; }
 
     // =====================================================
     // ===============  COLOCACIÓN INICIAL  ================
@@ -85,13 +92,13 @@ public class GameState {
         if (fase != FaseJuego.ATAQUE) return "⚠️ No se puede atacar fuera de la fase ATAQUE.";
         if (origen == null || destino == null) return "⚠️ Error: país atacante o defensor nulo.";
         if (origen.getPropietario() != getJugadorActual()) return "⚠️ No podés atacar con un país que no te pertenece.";
-        if (!origen.puedeAtacarA(destino)) return "⚠️ Ataque inválido: no son limítrofes o no hay tropas suficientes.";
+        if (origen.getTropas() <= 1) return "⚠️ Necesitás al menos 2 tropas para atacar.";
 
-        Batalla batalla = new Batalla(origen, destino);
+        // 👇 Importante: NO validamos adyacencia acá. Eso lo resuelve Batalla usando la habilidad del personaje.
+        Batalla batalla = new Batalla(this, origen, destino); // pasa GameState para usar numeroRonda y habilidades
         String resultado = batalla.ejecutarBatalla();
 
-        // 🧩 Evaluar si el jugador ganó tras la batalla
-        evaluarVictoria();
+        evaluarVictoria(); // Verifica si el ataque generó victoria
         return resultado;
     }
 
@@ -153,7 +160,6 @@ public class GameState {
         Jugador actual = getJugadorActual();
         refuerzosPendientes.put(actual, 0);
 
-        // 🧩 También evaluamos victoria por si el objetivo depende de tener cierto control
         evaluarVictoria();
         if (hayGanador()) return;
 
@@ -166,6 +172,9 @@ public class GameState {
         }
 
         if (todosAgruparon) {
+            // 🔁 Avanza la ronda cuando TODOS terminaron de agrupar
+            avanzarRonda();
+
             fase = FaseJuego.ATAQUE;
             rondaCompletada = false;
             turno = 0;
@@ -174,6 +183,50 @@ public class GameState {
             turno = (turno + 1) % jugadores.size();
             System.out.println("➡️ Ahora agrupa: " + getJugadorActual().getNombre());
         }
+    }
+
+    // =====================================================
+    // ==============  MÉTODOS AUXILIARES NUEVOS ===========
+    // =====================================================
+
+    private void inicializarCooldownHabilidadesParaTodos() {
+        for (Jugador j : jugadores) {
+            j.inicializarCooldownHabilidad(numeroRonda);
+        }
+    }
+
+    private void avanzarRonda() {
+        numeroRonda++;
+        System.out.println("🔁 Nueva ronda: " + numeroRonda);
+        // No hace falta tocar jugadores acá: cada uno calcula su próxima disponibilidad al consumir habilidad.
+    }
+
+    /** Devuelve un set con todos los países del mapa (de todos los jugadores). */
+    public Set<Pais> getTodosLosPaises() {
+        Set<Pais> todos = new HashSet<>();
+        for (Jugador j : jugadores) {
+            if (j.getPaisesControlados() != null) todos.addAll(j.getPaisesControlados());
+        }
+        return todos;
+    }
+
+    /** Devuelve cuántos países existen en cierto continente. */
+    public int totalPaisesEnContinente(String continente) {
+        int total = 0;
+        for (Pais p : getTodosLosPaises()) {
+            if (p.getContinente().equalsIgnoreCase(continente)) total++;
+        }
+        return total;
+    }
+
+    /** Devuelve cuántos países controla un jugador en cierto continente. */
+    public int paisesDelJugadorEnContinente(Jugador j, String continente) {
+        if (j == null || j.getPaisesControlados() == null) return 0;
+        int cant = 0;
+        for (Pais p : j.getPaisesControlados()) {
+            if (p.getContinente().equalsIgnoreCase(continente)) cant++;
+        }
+        return cant;
     }
 
     // =====================================================

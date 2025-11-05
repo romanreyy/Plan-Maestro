@@ -100,8 +100,8 @@ public class PantallaJuego implements Screen {
     }
 
     private void inicializarAreaObjetivo() {
-        float anchoObjetivo = 600;
-        float altoObjetivo = 400;
+        float anchoObjetivo = 532;
+        float altoObjetivo = 633;
         float x = (MiJuegoPrincipal.ANCHO_VIRTUAL - anchoObjetivo) / 2;
         float y = (MiJuegoPrincipal.ALTO_VIRTUAL - altoObjetivo) / 2;
         areaObjetivo = new Rectangle(x, y, anchoObjetivo, altoObjetivo);
@@ -154,6 +154,31 @@ public class PantallaJuego implements Screen {
             case "El Mentiroso Rey":   return "tropa_mentiroso.png";
             case "El Ratón del Grupo": return "tropa_raton.png";
             default:                   return "tropa_marinero.png";
+        }
+    }
+
+    /** Devuelve el archivo de sprite a usar según el objetivo asignado. */
+    private String obtenerSpriteObjetivo(Objetivo obj) {
+        if (obj == null) return "sprite_objetivo.png"; // fallback
+
+        String nombre = obj.getNombre();
+        if (nombre == null) return "sprite_objetivo.png";
+
+        switch (nombre) {
+            case "Plan Dominacion":
+                return "objetivo1.png";
+            case "Control Total del Territorio Rico":
+                return "objetivo2.png";
+            case "Dominacion del pobre":
+                return "objetivo3.png";
+            case "Equilibrio Estrategico":
+                return "objetivo6.png";
+            case "Expansion Mixta":
+                return "objetivo5.png";
+            case "Rico y Pobre":
+                return "objetivo4.png";
+            default:
+                return "sprite_objetivo.png"; // default si falta el asset
         }
     }
 
@@ -780,10 +805,21 @@ public class PantallaJuego implements Screen {
 
     private void alPresionarObjetivo() {
         mostrandoObjetivo = true;
-        if (jugadorActual.tieneObjetivo()) {   // <-- antes decía tienePersonaje()
+
+        String archivo = "sprite_objetivo.png";
+        if (jugadorActual.tieneObjetivo()) {
             Objetivo objetivo = jugadorActual.getObjetivoAsignado();
+            archivo = obtenerSpriteObjetivo(objetivo);
             System.out.println("Objetivo: " + objetivo.getNombre());
             System.out.println("Descripción: " + objetivo.getDescripcion());
+        }
+
+        if (texturaObjetivo != null) texturaObjetivo.dispose();
+        try {
+            texturaObjetivo = new Texture(archivo);
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar " + archivo + ", usando fallback.");
+            texturaObjetivo = new Texture("sprite_objetivo.png");
         }
     }
 

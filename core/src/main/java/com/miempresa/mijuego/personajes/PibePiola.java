@@ -8,7 +8,8 @@ public class PibePiola extends Personaje {
             "El Pibe Piola",
             "El Pibe Piola, nacido en la cima...",
             "Recuperación Rápida: Puede recuperar territorios perdidos con mayor facilidad.",
-            Color.BLUE
+            Color.BLUE,
+            6
         );
     }
 }

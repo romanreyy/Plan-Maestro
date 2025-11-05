@@ -9,8 +9,14 @@ import java.util.*;
 public class Jugador {
     private String nombre;
     private Personaje personajeSeleccionado;
-    private Objetivo objetivoAsignado; // NUEVO
-    private List<Pais> paisesControlados; // NUEVO
+    private Objetivo objetivoAsignado;
+    private List<Pais> paisesControlados;
+
+    // =======================
+    // NUEVO: estado habilidad
+    // =======================
+    /** Ronda en la que la habilidad vuelve a estar disponible (incluida). */
+    private Integer siguienteRondaHabilidad = null;
 
     public Jugador(String nombre) {
         this.nombre = nombre;
@@ -19,10 +25,61 @@ public class Jugador {
         this.paisesControlados = new ArrayList<>();
     }
 
+    // =========================
+    // Asignación de personaje
+    // =========================
     public void asignarPersonaje(Personaje personaje) {
         this.personajeSeleccionado = personaje;
         System.out.println(nombre + " ha seleccionado a " + personaje.getNombre());
+        // Si querés que quede listo ya mismo (por ejemplo en ronda 0), podés inicializar acá:
+        // inicializarCooldownHabilidad(0);
     }
+
+    /** Overload que setea el cooldown inmediatamente según la ronda actual. */
+    public void asignarPersonaje(Personaje personaje, int rondaActual) {
+        this.personajeSeleccionado = personaje;
+        System.out.println(nombre + " ha seleccionado a " + personaje.getNombre());
+        inicializarCooldownHabilidad(rondaActual);
+    }
+
+    // ==========================================
+    // NUEVO: manejo de cooldown de la habilidad
+    // ==========================================
+    /** Llamalo cuando arranca la partida o al asignar personaje (con la ronda actual). */
+    public void inicializarCooldownHabilidad(int rondaActual) {
+        if (tienePersonaje()) {
+            int cd = personajeSeleccionado.getCooldownRondas();
+            // primera disponibilidad: rondaActual + cd
+            siguienteRondaHabilidad = rondaActual + cd;
+            System.out.println("⏳ Habilidad de " + nombre + " disponible desde la ronda " + siguienteRondaHabilidad);
+        } else {
+            siguienteRondaHabilidad = null;
+        }
+    }
+
+    /** ¿La habilidad está lista para usarse en esta ronda (o ya se pasó)? */
+    public boolean habilidadLista(int rondaActual) {
+        return tienePersonaje()
+            && siguienteRondaHabilidad != null
+            && rondaActual >= siguienteRondaHabilidad;
+    }
+
+    /** Consumí la habilidad: programa la próxima disponibilidad sumando el cooldown. */
+    public void consumirHabilidad(int rondaActual) {
+        if (!tienePersonaje()) return;
+        int cd = personajeSeleccionado.getCooldownRondas();
+        siguienteRondaHabilidad = rondaActual + cd;
+        System.out.println("⚡ " + nombre + " consumió su habilidad. Próxima en ronda " + siguienteRondaHabilidad);
+    }
+
+    /** (Opcional) Para HUD u hojas de debug. */
+    public Integer getSiguienteRondaHabilidad() {
+        return siguienteRondaHabilidad;
+    }
+
+    // ======================
+    // Resto de tu implementación
+    // ======================
 
     public void asignarObjetivo(Objetivo objetivo) {
         this.objetivoAsignado = objetivo;
@@ -37,33 +94,14 @@ public class Jugador {
         System.out.println(nombre + " ha recibido " + paises.size() + " países");
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public Personaje getPersonajeSeleccionado() { return personajeSeleccionado; }
+    public Objetivo getObjetivoAsignado() { return objetivoAsignado; }
+    public List<Pais> getPaisesControlados() { return paisesControlados; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public Personaje getPersonajeSeleccionado() {
-        return personajeSeleccionado;
-    }
-
-    public Objetivo getObjetivoAsignado() {
-        return objetivoAsignado;
-    }
-
-    public List<Pais> getPaisesControlados() {
-        return paisesControlados;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public boolean tienePersonaje() {
-        return personajeSeleccionado != null;
-    }
-
-    public boolean tieneObjetivo() {
-        return objetivoAsignado != null;
-    }
+    public boolean tienePersonaje() { return personajeSeleccionado != null; }
+    public boolean tieneObjetivo() { return objetivoAsignado != null; }
 
     public String getInformacionJugador() {
         StringBuilder info = new StringBuilder();
@@ -80,7 +118,6 @@ public class Jugador {
         } else {
             info.append("Sin objetivo asignado\n");
         }
-
 
         return info.toString();
     }
@@ -157,7 +194,6 @@ public class Jugador {
         paisesDisponibles.add(new VillaPalito());
         paisesDisponibles.add(new VillaSoldati());
         paisesDisponibles.add(new VirreyDelPino());
-
 
         Collections.shuffle(paisesDisponibles);
 
