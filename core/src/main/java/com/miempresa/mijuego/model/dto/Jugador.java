@@ -80,6 +80,8 @@ public class Jugador {
     public Objetivo getObjetivoAsignado() { return objetivoAsignado; }
     public List<Pais> getPaisesControlados() { return paisesControlados; }
 
+
+
     public boolean tienePersonaje() { return personajeSeleccionado != null; }
     public boolean tieneObjetivo() { return objetivoAsignado != null; }
 
@@ -129,5 +131,9 @@ public class Jugador {
         // Copia propia para no quedar atado a subList
         List<Pais> seleccion = new ArrayList<>(pool.subList(0, cantidad));
         jugador.asignarPaises(seleccion);
+    }
+
+    public void setPaisesControlados(List<Pais> paises) {
+        this.paisesControlados = (paises != null) ? paises : new ArrayList<>();
     }
 }

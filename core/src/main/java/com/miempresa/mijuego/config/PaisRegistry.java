@@ -26,7 +26,7 @@ public class PaisRegistry {
         Pais bajoFlores = new Pais("Bajo Flores", "Pobre", new ArrayList<>());
         registry.paises.add(bajoFlores);
 
-        Pais barrioPiolin = new Pais("Barrio Piolín", "Pobre", new ArrayList<>());
+        Pais barrioPiolin = new Pais("Barrio Piolin", "Pobre", new ArrayList<>());
         registry.paises.add(barrioPiolin);
 
         Pais barrioSanJorge = new Pais("Barrio San Jorge", "Pobre", new ArrayList<>());
@@ -38,7 +38,7 @@ public class PaisRegistry {
         Pais ciudadOculta = new Pais("Ciudad Oculta", "Pobre", new ArrayList<>());
         registry.paises.add(ciudadOculta);
 
-        Pais constitucion = new Pais("Constitución", "Pobre", new ArrayList<>());
+        Pais constitucion = new Pais("Constitucion", "Pobre", new ArrayList<>());
         registry.paises.add(constitucion);
 
         Pais cuartelV = new Pais("Cuartel V", "Pobre", new ArrayList<>());
@@ -53,7 +53,7 @@ public class PaisRegistry {
         Pais donOrione = new Pais("Don Orione", "Pobre", new ArrayList<>());
         registry.paises.add(donOrione);
 
-        Pais elJardin = new Pais("El Jardín", "Pobre", new ArrayList<>());
+        Pais elJardin = new Pais("El Jardin", "Pobre", new ArrayList<>());
         registry.paises.add(elJardin);
 
         Pais emebe04PuntaDeRielesNuevos = new Pais("Emebe 04 Punta de Rieles Nuevos", "Pobre", new ArrayList<>());
@@ -62,7 +62,7 @@ public class PaisRegistry {
         Pais fuerteApache = new Pais("Fuerte Apache", "Pobre", new ArrayList<>());
         registry.paises.add(fuerteApache);
 
-        Pais gonzalezCatan = new Pais("González Catán", "Pobre", new ArrayList<>());
+        Pais gonzalezCatan = new Pais("Gonzalez Catan", "Pobre", new ArrayList<>());
         registry.paises.add(gonzalezCatan);
 
         Pais hidalgo = new Pais("Hidalgo", "Pobre", new ArrayList<>());
@@ -74,7 +74,7 @@ public class PaisRegistry {
         Pais isidroCasanova = new Pais("Isidro Casanova", "Pobre", new ArrayList<>());
         registry.paises.add(isidroCasanova);
 
-        Pais joseCPaz = new Pais("José C. Paz", "Pobre", new ArrayList<>());
+        Pais joseCPaz = new Pais("Jose C. Paz", "Pobre", new ArrayList<>());
         registry.paises.add(joseCPaz);
 
         Pais la18 = new Pais("La 18", "Pobre", new ArrayList<>());
@@ -149,7 +149,7 @@ public class PaisRegistry {
         Pais villaFiorito = new Pais("Villa Fiorito", "Pobre", new ArrayList<>());
         registry.paises.add(villaFiorito);
 
-        Pais villaItati = new Pais("Villa Itatí", "Pobre", new ArrayList<>());
+        Pais villaItati = new Pais("Villa Itati", "Pobre", new ArrayList<>());
         registry.paises.add(villaItati);
 
         Pais villaLanzone = new Pais("Villa Lanzone", "Pobre", new ArrayList<>());
