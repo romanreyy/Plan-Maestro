@@ -25,7 +25,7 @@ public class PersonajeRegistry {
 
     private void registerAllPersonaje() {
         Personaje marineroPapa = new Personaje( "El Marinero Papá",
-            "El marinero papá, nacido en los mares, un conocedor de todo el mundo y con la capacidad de ir a cualquier sitio sin ningún mapa, la única herramienta que necesita es la brújula ubicada en su cabeza.",
+            "El marinero papa, nacido en los mares, un conocedor de todo el mundo y con la capacidad de ir a cualquier sitio sin ningún mapa, la única herramienta que necesita es la brújula ubicada en su cabeza.",
             "Navegación Experta",
             Color.BROWN,
             5
@@ -49,7 +49,7 @@ public class PersonajeRegistry {
         personajes.add(mentirosoRey);
 
         Personaje ratonDelGrupo = new Personaje( "El Ratón del Grupo",
-            "El Ratón del Grupo, nacido en una casa llena de ratones donde se acostumbró a no pagar nada a menos que sea muy necesario, tiene la habilidad de hacer que los demás tampoco se gastan.",
+            "El Raton del Grupo, nacido en una casa llena de ratones donde se acostumbró a no pagar nada a menos que sea muy necesario, tiene la habilidad de hacer que los demás tampoco se gastan.",
             "Ahorro Forzoso: Reduce los costos de acciones para todos los jugadores.",
             Color.GREEN,
             5

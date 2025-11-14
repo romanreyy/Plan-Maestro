@@ -138,11 +138,11 @@ public class PantallaJuego implements Screen, GameController {
         if (ganador.tienePersonaje()) {
             String nom = ganador.getPersonajeSeleccionado().getNombre();
             switch (nom) {
-                case "El Villero":         archivoVictoria = "victoria_villero.png"; break;
+                case "El Villero":         archivoVictoria = "victoria_el_villero.png"; break;
                 case "El Pibe Piola":      archivoVictoria = "victoria_pibe_piola.png"; break;
-                case "El Mentiroso Rey":   archivoVictoria = "victoria_mentiroso.png"; break;
-                case "El Marinero Papá":   archivoVictoria = "victoria_marinero.png"; break;
-                case "El Ratón del Grupo": archivoVictoria = "victoria_raton.png"; break;
+                case "El Mentiroso Rey":   archivoVictoria = "victoria_el_mentiroso_rey.png"; break;
+                case "El Marinero Papa":   archivoVictoria = "victoria_el_marinero_papa.png"; break;
+                case "El Raton del Grupo": archivoVictoria = "victoria_el_raton_del_grupo.png"; break;
             }
         }
         if (fondoVictoria != null) fondoVictoria.dispose();

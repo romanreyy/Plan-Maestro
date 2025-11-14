@@ -150,10 +150,6 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void sendReinforce(String pais) {
-        sendMessage("Reinforce:" + pais);
-    }
-
     // Helpers de alto nivel (según tu GameState/protocolo)
     public void sendConnect() { sendMessage("Connect"); }
 
@@ -168,6 +164,8 @@ public class ClientThread extends Thread {
     }
 
     public void sendEndTurn() { sendMessage("EndTurn"); }
+
+    public void sendReinforce(String pais) { sendMessage("Reinforce:" + pais); }
 
     public void terminate() {
         end = true;
