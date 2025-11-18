@@ -18,11 +18,10 @@ public class ClientThread extends Thread {
     public ClientThread(GameController gameController) {
         this.gameController = gameController;
         try {
-            // Descubrimiento por broadcast (como en tu cliente de Plan Maestro)
             this.ipServer = InetAddress.getByName("255.255.255.255");
             this.socket = new DatagramSocket();
             this.socket.setBroadcast(true);
-            this.socket.setSoTimeout(600); // permite salir limpiamente del while
+            this.socket.setSoTimeout(600);
         } catch (IOException e) {
             throw new RuntimeException("Error inicializando cliente UDP", e);
         }
@@ -47,7 +46,7 @@ public class ClientThread extends Thread {
 
     private void processMessage(DatagramPacket packet) {
         String message = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8).trim();
-        System.out.println("📨 Mensaje recibido: " + message);
+        System.out.println("Mensaje recibido: " + message);
 
         String[] parts = message.split(":");
         if (parts.length == 0) return;
@@ -67,7 +66,7 @@ public class ClientThread extends Thread {
             }
 
             case "Full":
-                System.out.println("🚫 Servidor lleno");
+                System.out.println("Servidor lleno");
                 end = true;
                 break;
 
@@ -118,13 +117,11 @@ public class ClientThread extends Thread {
             }
 
             case "Info": {
-                // Tomamos TODO lo que viene después de "Info:"
                 String prefix = "Info:";
                 String cuerpo;
                 if (message.startsWith(prefix)) {
                     cuerpo = message.substring(prefix.length()).trim();
                 } else if (parts.length > 1) {
-                    // fallback por las dudas
                     cuerpo = message.substring(message.indexOf(':') + 1).trim();
                 } else {
                     cuerpo = "";
@@ -165,7 +162,6 @@ public class ClientThread extends Thread {
         }
     }
 
-    // Helpers de alto nivel (según tu GameState/protocolo)
     public void sendConnect() { sendMessage("Connect"); }
 
     public void sendClick(String pais) { sendMessage("Click:" + pais); }

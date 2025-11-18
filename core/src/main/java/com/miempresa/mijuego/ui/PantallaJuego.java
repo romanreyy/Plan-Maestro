@@ -330,7 +330,7 @@ public class PantallaJuego implements Screen, GameController {
         ciudadOculta.setScale(1.4f);
         spritesPaises.put("Ciudad Oculta", ciudadOculta);
 
-        Sprite laFraga = new Sprite(new Texture("lafraga.png"));
+        Sprite laFraga = new Sprite(new Texture("laFraga.png"));
         laFraga.setPosition(1880, 355);
         laFraga.setScale(1.5f);
         spritesPaises.put("La Fraga", laFraga);
@@ -527,9 +527,7 @@ public class PantallaJuego implements Screen, GameController {
                 areaObjetivo.width, areaObjetivo.height);
         }
 
-        // Contador de países del jugador local (decorativo)
-        int cantPaises = (jugadorActual.getPaisesControlados() != null)
-            ? jugadorActual.getPaisesControlados().size() : 0;
+        int cantPaises = contarPaisesJugadorLocal();
 
         float oldScaleX = font.getData().scaleX, oldScaleY = font.getData().scaleY;
         font.getData().setScale(1.8f);
@@ -559,21 +557,6 @@ public class PantallaJuego implements Screen, GameController {
         }
 
         juego.loteSprites.end();
-
-        // Debug hitboxes
-        if (DEBUG_HITBOXES && debugShapes != null) {
-            debugShapes.setProjectionMatrix(juego.camara.combined);
-            debugShapes.begin(com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line);
-            debugShapes.setColor(1, 0, 0, 1);
-            debugShapes.circle(botonTimon.x, botonTimon.y, botonTimon.radius);
-            debugShapes.rect(botonAgrupar.x,  botonAgrupar.y,  botonAgrupar.width,  botonAgrupar.height);
-            debugShapes.rect(botonObjetivo.x, botonObjetivo.y, botonObjetivo.width, botonObjetivo.height);
-            debugShapes.rect(botonAtacar.x,   botonAtacar.y,   botonAtacar.width,   botonAtacar.height);
-            debugShapes.rect(areaContadorPaises.x, areaContadorPaises.y, areaContadorPaises.width, areaContadorPaises.height);
-            debugShapes.rect(botonDerecha.x,  botonDerecha.y,  botonDerecha.width,  botonDerecha.height);
-            debugShapes.circle(botonCirculo.x, botonCirculo.y, botonCirculo.radius);
-            debugShapes.end();
-        }
 
         // Overlay victoria
         if (victoriaActiva) {
@@ -944,6 +927,22 @@ public class PantallaJuego implements Screen, GameController {
             case 3: return jugador3;
             default: return null;
         }
+    }
+
+    private int contarPaisesJugadorLocal() {
+        // Si todavía no sabemos qué número de jugador somos, devolvemos 0
+        if (numPlayer < 1 || numPlayer > 3) return 0;
+
+        Jugador local = getJugadorPorId(numPlayer);
+        if (local == null) return 0;
+
+        int count = 0;
+        for (Pais p : paisesPorNombre.values()) {
+            if (p.getPropietario() == local) {
+                count++;
+            }
+        }
+        return count;
     }
 
     @Override
