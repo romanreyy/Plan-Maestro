@@ -33,25 +33,33 @@ public class MenuPrincipal implements Screen {
 
         cargarAudio();
 
-        botonJugar = new Rectangle(669, 436, 1118, 182);   // Botón JUGAR
-        botonAjustes = new Rectangle(669, 219, 1118, 182); // Botón AJUSTES
-        botonSalir = new Rectangle(938, 83, 548, 111);     // Botón SALIR
+        botonJugar   = new Rectangle(669, 436, 1118, 182); // JUGAR
+        botonAjustes = new Rectangle(669, 219, 1118, 182); // AJUSTES
+        botonSalir   = new Rectangle(938,  83,  548, 111); // SALIR
     }
 
     private void cargarAudio() {
         try {
             musicaFondo = Gdx.audio.newMusic(Gdx.files.internal("musica_menu_principal.ogg"));
-            musicaFondo.setVolume(0.7f);
-
+            // usamos el volumen global que maneja PantallaAjustes
+            musicaFondo.setVolume(PantallaAjustes.getVolumenJuego());
+            musicaFondo.setLooping(true);
         } catch (Exception e) {
             System.out.println("No se pudo cargar la música. Verifica que esté en assets/");
-            System.out.println("Archivo necesario: musica_menu.mp3");
+            System.out.println("Archivo necesario: musica_menu_principal.ogg");
+        }
+
+        try {
+            sonidoBoton = Gdx.audio.newSound(Gdx.files.internal("sonido_boton.mp3"));
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar sonido_boton.mp3");
         }
     }
 
     @Override
     public void show() {
         if (musicaFondo != null) {
+            musicaFondo.setVolume(PantallaAjustes.getVolumenJuego()); // por si cambió
             musicaFondo.play();
         }
     }
@@ -66,7 +74,9 @@ public class MenuPrincipal implements Screen {
         manejarInput();
 
         juego.loteSprites.begin();
-        juego.loteSprites.draw(texturaMenu, 0, 0, MiJuegoPrincipal.ANCHO_VIRTUAL, MiJuegoPrincipal.ALTO_VIRTUAL);
+        juego.loteSprites.draw(texturaMenu, 0, 0,
+            MiJuegoPrincipal.ANCHO_VIRTUAL,
+            MiJuegoPrincipal.ALTO_VIRTUAL);
         juego.loteSprites.end();
     }
 
@@ -98,10 +108,10 @@ public class MenuPrincipal implements Screen {
     private void alPresionarAjustes() {
         reproducirSonidoBoton();
         System.out.println("Abriendo ajustes desde menú...");
-        if (musicaFondo != null) {
-            musicaFondo.stop();
-        }
-        juego.setScreen(new PantallaAjustes(juego, false));
+
+        // ⚠️ IMPORTANTE: NO parar la música.
+        // Se la pasamos a PantallaAjustes para que ajuste su volumen.
+        juego.setScreen(new PantallaAjustes(juego, this, musicaFondo));
     }
 
     private void alPresionarSalir() {
@@ -112,7 +122,7 @@ public class MenuPrincipal implements Screen {
 
     private void reproducirSonidoBoton() {
         if (sonidoBoton != null) {
-            sonidoBoton.play(0.8f); // Volumen al 80%
+            sonidoBoton.play(PantallaAjustes.getVolumenJuego()); // mismo volumen global
         }
     }
 
@@ -121,16 +131,12 @@ public class MenuPrincipal implements Screen {
         juego.vistaVentana.update(ancho, alto);
     }
 
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
+    @Override public void pause() {}
+    @Override public void resume() {}
 
     @Override
     public void hide() {
+        // solo pausamos, no seteamos volume acá
         if (musicaFondo != null) {
             musicaFondo.pause();
         }

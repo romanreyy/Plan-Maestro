@@ -79,6 +79,11 @@ public class PantallaJuego implements Screen, GameController {
 
     private final BitmapFont font = new BitmapFont();
 
+    // Log de eventos (cuadro abajo a la izquierda)
+    private Rectangle areaLog;
+    private final ArrayList<String> logMensajes = new ArrayList<>();
+    private static final int MAX_LOG_LINES = 8;
+
     public PantallaJuego(MiJuegoPrincipal juego) {
         this(juego, new Jugador("Jugador por defecto"));
     }
@@ -114,8 +119,14 @@ public class PantallaJuego implements Screen, GameController {
         float x = (MiJuegoPrincipal.ANCHO_VIRTUAL - anchoObjetivo) / 2f;
         float y = (MiJuegoPrincipal.ALTO_VIRTUAL - altoObjetivo) / 2f;
         areaObjetivo = new Rectangle(x, y, anchoObjetivo, altoObjetivo);
-    }
 
+        // 👉 Panel de log abajo a la izquierda (ajustá estos números si no coincide perfecto)
+        float logX = 40;
+        float logY = 20;
+        float logW = 430;
+        float logH = 210;
+        areaLog = new Rectangle(logX, logY, logW, logH);
+    }
     private void cargarTexturaPersonaje() {
         if (jugadorActual.tienePersonaje()) {
             String nombrePersonaje = jugadorActual.getPersonajeSeleccionado().getNombre();
@@ -444,6 +455,26 @@ public class PantallaJuego implements Screen, GameController {
         return null;
     }
 
+    private void agregarLogLinea(String linea) {
+        if (linea == null) return;
+        linea = linea.trim();
+        if (linea.isEmpty()) return;
+
+        if (logMensajes.size() >= MAX_LOG_LINES) {
+            logMensajes.remove(0); // saca la más vieja
+        }
+        logMensajes.add(linea);
+    }
+
+    private void agregarLog(String texto) {
+        if (texto == null) return;
+        // Soporta textos con saltos de línea
+        String[] partes = texto.split("\n");
+        for (String l : partes) {
+            agregarLogLinea(l);
+        }
+    }
+
     // ======== Render ========
     @Override
     public void render(float delta) {
@@ -507,6 +538,25 @@ public class PantallaJuego implements Screen, GameController {
         float numeroY = areaContadorPaises.y + (areaContadorPaises.height - layoutNumero.height) / 2f + layoutNumero.height;
         font.draw(juego.loteSprites, layoutNumero, numeroX, numeroY);
         font.getData().setScale(oldScaleX, oldScaleY);
+
+        // ===== DIBUJAR LOG ABAJO IZQUIERDA =====
+        if (areaLog != null && !logMensajes.isEmpty()) {
+            float oldScaleX2 = font.getData().scaleX;
+            float oldScaleY2 = font.getData().scaleY;
+            font.getData().setScale(0.8f); // más chiquita para que entren varias líneas
+
+            float margin = 10f;
+            float xLog = areaLog.x + margin;
+            float yLog = areaLog.y + areaLog.height - margin;
+
+            // dibujamos de la línea más vieja a la más nueva (la de abajo será la más reciente)
+            for (int i = 0; i < logMensajes.size(); i++) {
+                String linea = logMensajes.get(i);
+                font.draw(juego.loteSprites, linea, xLog, yLog - i * 22f); // 22f = separación vertical
+            }
+
+            font.getData().setScale(oldScaleX2, oldScaleY2);
+        }
 
         juego.loteSprites.end();
 
@@ -680,7 +730,8 @@ public class PantallaJuego implements Screen, GameController {
     }
 
     private void alPresionarTimon() {
-        juego.setScreen(new PantallaAjustes(juego, true));
+        // desde el juego → ajustes, sin música propia
+        juego.setScreen(new PantallaAjustes(juego, this, null));
     }
 
     private void alPresionarObjetivo() {
@@ -804,7 +855,10 @@ public class PantallaJuego implements Screen, GameController {
     public void onTurn(int playerId) {
         Gdx.app.postRunnable(() -> {
             this.turnoActualId = playerId;
+            Jugador j = getJugadorPorId(playerId);
+            String nombre = (j != null) ? j.getNombre() : ("Jugador " + playerId);
             System.out.println("Turno remoto de jugador #" + playerId);
+            agregarLog("➡️ Turno de " + nombre);
         });
     }
 
@@ -813,6 +867,7 @@ public class PantallaJuego implements Screen, GameController {
         Gdx.app.postRunnable(() -> {
             this.faseActual = fase;
             System.out.println("Fase remota: " + fase);
+            agregarLog("🧭 Fase: " + fase.name());
         });
     }
 
@@ -856,12 +911,18 @@ public class PantallaJuego implements Screen, GameController {
 
     @Override
     public void onInfo(String msg) {
-        Gdx.app.postRunnable(() -> System.out.println("INFO: " + msg));
+        Gdx.app.postRunnable(() -> {
+            System.out.println("INFO: " + msg);
+            agregarLog(msg);
+        });
     }
 
     @Override
     public void onError(String msg) {
-        Gdx.app.postRunnable(() -> System.err.println("ERROR: " + msg));
+        Gdx.app.postRunnable(() -> {
+            System.err.println("ERROR: " + msg);
+            agregarLog("⚠️ " + msg);
+        });
     }
 
     // ======== Red: envíos ========
@@ -885,7 +946,6 @@ public class PantallaJuego implements Screen, GameController {
         }
     }
 
-    // ======== Ciclo de vida Screen ========
     @Override
     public void show() {
         System.out.println("PantallaJuego mostrada");
@@ -894,6 +954,15 @@ public class PantallaJuego implements Screen, GameController {
         clientThread = new ClientThread(this);
         clientThread.start();
         clientThread.sendConnect(); // "Connect"
+
+        // 🔹 Enviar el personaje elegido al servidor (si ya tiene uno)
+        if (jugadorActual.tienePersonaje()) {
+            clientThread.sendPersonaje(
+                jugadorActual.getPersonajeSeleccionado().getNombre()
+            );
+            System.out.println("Enviando personaje al servidor: " +
+                jugadorActual.getPersonajeSeleccionado().getNombre());
+        }
     }
 
     @Override

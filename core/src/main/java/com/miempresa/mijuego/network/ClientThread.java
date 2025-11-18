@@ -117,9 +117,24 @@ public class ClientThread extends Thread {
                 break;
             }
 
-            case "Info":
-                if (parts.length > 1) gameController.onInfo(parts[1]);
+            case "Info": {
+                // Tomamos TODO lo que viene después de "Info:"
+                String prefix = "Info:";
+                String cuerpo;
+                if (message.startsWith(prefix)) {
+                    cuerpo = message.substring(prefix.length()).trim();
+                } else if (parts.length > 1) {
+                    // fallback por las dudas
+                    cuerpo = message.substring(message.indexOf(':') + 1).trim();
+                } else {
+                    cuerpo = "";
+                }
+
+                if (!cuerpo.isEmpty()) {
+                    gameController.onInfo(cuerpo);
+                }
                 break;
+            }
 
             case "Error":
                 if (parts.length > 1) gameController.onError(parts[1]);
@@ -166,6 +181,10 @@ public class ClientThread extends Thread {
     public void sendEndTurn() { sendMessage("EndTurn"); }
 
     public void sendReinforce(String pais) { sendMessage("Reinforce:" + pais); }
+
+    public void sendPersonaje(String nombrePersonaje) {
+        sendMessage("Personaje:" + nombrePersonaje);
+    }
 
     public void terminate() {
         end = true;
